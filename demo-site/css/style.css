@@ -1,0 +1,48 @@
+html, body, div, form, fieldset, legend, label {
+  margin: 0;
+  padding: 0; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+th, td {
+  text-align: left;
+  vertical-align: top; }
+
+h1, h2, h3, h4, h5, h6, th, td, caption {
+  font-weight: normal; }
+
+img {
+  border: 0; }
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  min-width: 58.000em; }
+
+header {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5em 2em;
+  height: 4.000em;
+  background-color: #2E6744;
+  overflow: hidden; }
+  header h1 {
+    display: inline;
+    font-size: 20pt;
+    letter-spacing: 0.125em;
+    color: #FFF;
+    line-height: 180%; }
+  header a {
+    text-decoration: none;
+    color: inherit; }
+    header a:nth-child(2) {
+      float: right;
+      position: relative;
+      top: 1.750em;
+      transition: .10s ease-in; }
+      header a:nth-child(2) img {
+        width: 8.000em; }
+      header a:nth-child(2):hover {
+        -webkit-transform: translateY(-1.875em);
+        transform: translateY(-1.875em); }

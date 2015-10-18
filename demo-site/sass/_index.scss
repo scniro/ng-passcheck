@@ -1,0 +1,41 @@
+﻿body {
+	font-family: 'Open Sans', sans-serif;
+	min-width: 58.000em;
+}
+
+header {
+	width: 100%;
+	box-sizing: border-box;
+	padding: 0.500em 2.000em;
+	height: 4.000em;
+	background-color: $header;
+	overflow: hidden;
+
+	h1 {
+		display: inline;
+		font-size: 20pt;
+		letter-spacing: 0.125em;
+		color: #FFF;
+		line-height: 180%;
+	}
+
+	a {
+		text-decoration: none;
+		color: inherit;
+
+		&:nth-child(2) {
+			float: right;
+			position: relative;
+			top: 1.750em;
+			transition: .10s ease-in;
+
+			img {
+				width: 8.000em;
+			}
+
+			&:hover {
+				transform: translateY(-1.875em);
+			}
+		}
+	}
+}
