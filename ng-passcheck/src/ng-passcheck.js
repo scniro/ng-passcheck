@@ -15,12 +15,16 @@
 		}
 	}
 })
-.factory('passCheckService', function () {
+.factory('passCheckService', function ($http) {
 
 	var passRegex = {
 		'strong': new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{9,})'),
 		'medium': new RegExp('^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})')
 	};
+
+	$http.get('/ng-passcheck/src/passwords.json').then(function (response) {
+		console.log(response);
+	});
 
 	function analyze(password) {
 		var result = {};
