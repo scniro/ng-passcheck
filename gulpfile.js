@@ -39,6 +39,22 @@ gulp.task('passwords', function () {
 
 	var lines = fs.readFileSync('passwords.txt').toString().split('\n');
 	var result = lines.filter(isNotEmpty).map(parseLine);
-	var json = JSON.stringify(result);
+	var json = JSON.stringify({ 'format': 'text', 'dictionary': result });
 	fs.writeFileSync('ng-passcheck/src/passwords.json', json);
+});
+
+gulp.task('passwords:hashed', function() {
+	function isNotEmpty(line) {
+		return Boolean(line.length);
+	}
+
+	function parseLine(line) {
+		//return line.trim();
+		return crc32.unsigned(line.trim());
+	}
+
+	var lines = fs.readFileSync('passwords.txt').toString().split('\n');
+	var result = lines.filter(isNotEmpty).map(parseLine);
+	var json = JSON.stringify({ 'format': 'crc32', 'dictionary': result });
+	fs.writeFileSync('ng-passcheck/src/passwords-hashed.json', json);
 });
