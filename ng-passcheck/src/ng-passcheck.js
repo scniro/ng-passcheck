@@ -6,11 +6,13 @@
 			password: '=ngModel'
 		},
 		link: function (scope, elem, attrs) {
+			scope.$on('passCheckService:init', function () {
 
-			elem.after(angular.element($compile('<span ng-class="{\'weak\' : result.strength === 0, \'medium\' : result.strength === 1, \'strong\' : result.strength === 2}">{{ result.description }}</span>')(scope)));
+				elem.after(angular.element($compile('<span ng-class="{\'weak\' : result.strength === 0, \'medium\' : result.strength === 1, \'strong\' : result.strength === 2}">{{ result.description }}</span>')(scope)));
 
-			scope.$watch('password', function (n, o) {
-				scope.result = n ? passCheckService.analyze(n) : null;
+				scope.$watch('password', function (n, o) {
+					scope.result = n ? passCheckService.analyze(n) : null;
+				});
 			});
 		}
 	}
@@ -33,16 +35,19 @@
 		}
 	}
 })
-.factory('passCheckService', function (passCheck, $http) {
+.factory('passCheckService', function (passCheck, $http, $rootScope) {
 
-	if (passCheck.testCommon) {
-		$http.get(passCheck.testCommon.path).then(function (response) {
-			console.log(response);
-		});
+	var dictionary;
+
+	function appendTransform(defaults, transform) {
+		defaults = angular.isArray(defaults) ? defaults : [defaults];
+		return defaults.concat(transform);
 	}
 
 	function analyze(password) {
 		var result = {};
+
+		console.log(dictionary);
 
 		if (passCheck.regex.strong.test(password)) {
 			result.strength = 2;
@@ -56,6 +61,23 @@
 		}
 
 		return result;
+	}
+
+	function init(data) {
+		dictionary = data;
+		$rootScope.$broadcast('passCheckService:init');
+	}
+
+	if (passCheck.testCommon) {
+		$http.get(passCheck.testCommon.path, {
+			transformResponse: appendTransform($http.defaults.transformResponse, function(data) {
+				return data.slice(0, passCheck.testCommon.limit || data.length);
+			})
+		}).then(function(response) {
+			init(response.data);
+		});
+	} else {
+		init();
 	}
 
 	return {
