@@ -18,9 +18,10 @@ angular.module('ngPasscheck', []).directive('passCheck', function ($compile, pas
 		link: function (scope, elem, attrs) {
 			scope.$on('passCheckService:init', function () {
 
-				elem.after(angular.element($compile('<span ng-class="{\'weak\' : result.strength === 0, \'medium\' : result.strength === 1, \'strong\' : result.strength === 2}">{{ result.description }}</span>')(scope)));
+				elem.after(angular.element($compile('<span ng-class="{\'weak\' : result.strength === 0, \'medium\' : result.strength === 1, \'strong\' : result.strength === 2}">{{ result.numeric }}</span>')(scope)));
 
 				scope.$watch('password', function (n) {
+					
 					scope.result = n ? passCheckService.analyze(n) : null;
 				});
 			});
@@ -56,31 +57,54 @@ angular.module('ngPasscheck', []).directive('passCheck', function ($compile, pas
 		return defaults.concat(transform);
 	}
 
-	function analyze(value) {
-		var result = {};
+	function getNumericStrength(value, strength, isCommon) {
 
-		var password = passFormat === 'crc32' ? value.crc32() : value;
-
-		if (passCheck.testCommon) {
-			if (dictionary.indexOf(password) > -1) {
-				console.log('in');
-			} else {
-				console.log('no');
-			}
+		var maximum = {
+			'strong': isCommon ? 50 : 100,
+			'medium': isCommon ? 30 : 60,
+			'weak': isCommon ? 15 : 30
 		}
 
-		console.log(passCheck);
+		var bonus = {
+			'specialCharacters': 10 * (value.replace(/[^\w\s]/gi, '').length !== value.length ? value.match(/[^\w\s]/gi, '').length : 0),
+			'capitalCharacters': 5 * (/[A-Z]/.test(value) ? value.replace(/[^A-Z]/g, '').length : 0)
+		}
 
-		if (passCheck.regex.strong.test(password)) {
+		var n = (value.length * 5) + bonus.specialCharacters + bonus.capitalCharacters;
+
+		switch(strength) {
+			case 2:
+				n = n > maximum.strong ? maximum.strong : n;
+				break;
+			case 1:
+				n = n > maximum.medium ? maximum.medium : n;
+				break;
+			case 0:
+				n = n > maximum.weak ? maximum.weak : n;
+				break;
+		}
+
+		return n;
+	}
+
+	function analyze(value) {
+
+		var result = {};
+
+		var isCommon = passCheck.testCommon ? dictionary.indexOf(passFormat === 'crc32' ? value.crc32() : value) > -1 ? true : false : false;
+
+		if (passCheck.regex.strong.test(value)) {
 			result.strength = 2;
 			result.description = 'strong';
-		} else if (passCheck.regex.medium.test(password)) {
+		} else if (passCheck.regex.medium.test(value)) {
 			result.strength = 1;
 			result.description = 'ehh';
 		} else {
 			result.strength = 0;
 			result.description = 'weak sauce';
 		}
+
+		result.numeric = getNumericStrength(value, result.strength, isCommon);
 
 		return result;
 	}
