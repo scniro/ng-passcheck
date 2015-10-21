@@ -63,83 +63,49 @@ angular.module('ngPasscheck', []).directive('passCheck', function ($compile, pas
 
 		var considerations = {
 			'length': {
-				'short': { 'min': 8, 'factor': 2 },
-				'medium': { 'min': 16, 'factor': 4 },
-				'long': { 'min': 24, 'factor': 6 }
+				'short':
+					{ 'charcount': 08, 'factor': 2 },
+				'medium':
+					{ 'charcount': 14, 'factor': 3 },
+				'long':
+					{ 'charcount': 20, 'factor': 5 }
 			},
 			'specialCharacters': {
-				'count': value.replace(/[^\w\s]/gi, '').length !== value.length ? value.match(/[^\w\s]/gi, '').length : 0,
+				'count': /[^\w\s]/.test(value) ? value.match(/[^\w\s]/gi, '').length : 0,
 				'bonus': 2
 			},
 			'capitalCharacters': {
-				'count': /[A-Z]/.test(value) ? value.replace(/[^A-Z]/g, '').length : 0,
-				'bonus': 2
+				'count': /[A-Z]/.test(value) ? value.match(/[A-Z]+/g).length : 0,
+				'bonus': 1.5
+			},
+			'numericCharacters': {
+				'count': /\d+/.test(value) ? value.match(/\d+/gi, '').length : 0,
+				'bonus': 1.5
 			}
 		}
 
-		if (value.length <= considerations.length.short.min) {
-			n = considerations.length.short.factor * value.length;
-			n += ((considerations.capitalCharacters.count * considerations.capitalCharacters.bonus) * considerations.length.short.factor);
-			n += ((considerations.specialCharacters.count * considerations.specialCharacters.bonus) * considerations.length.short.factor);
+		if (value.length <= considerations.length.short.charcount) {
+			//n = considerations.length.short.factor * value.length;
+			//n += ((considerations.capitalCharacters.count * considerations.capitalCharacters.bonus) * considerations.length.short.factor);
+			//n += ((considerations.specialCharacters.count * considerations.specialCharacters.bonus) * considerations.length.short.factor);
+			//n += ((considerations.numericCharacters.count * considerations.numericCharacters.bonus) * considerations.length.short.factor);
 		}
 			
-		if (value.length > considerations.length.short.min && value.length < considerations.length.long.min) {
-			n = (considerations.length.medium.factor * value.length) - (considerations.length.short.factor * considerations.length.short.min);
-			n += ((considerations.capitalCharacters.count * considerations.capitalCharacters.bonus) * considerations.length.medium.factor);
-			n += ((considerations.specialCharacters.count * considerations.specialCharacters.bonus) * considerations.length.medium.factor);
+		if (value.length > considerations.length.short.charcount && value.length < considerations.length.long.charcount) {
+			//n = (considerations.length.medium.factor * value.length) - (considerations.length.short.factor * considerations.length.short.charcount);
+			//n += ((considerations.capitalCharacters.count * considerations.capitalCharacters.bonus) * considerations.length.medium.factor);
+			//n += ((considerations.specialCharacters.count * considerations.specialCharacters.bonus) * considerations.length.medium.factor);
+			//n += ((considerations.numericCharacters.count * considerations.numericCharacters.bonus) * considerations.length.medium.factor);
 		}
 		
-		if (value.length >= considerations.length.long.min) {
-			n = (considerations.length.long.factor * value.length) - (considerations.length.medium.factor * considerations.length.medium.min);
-			n += ((considerations.capitalCharacters.count * considerations.capitalCharacters.bonus) * considerations.length.long.factor);
-			n += ((considerations.specialCharacters.count * considerations.specialCharacters.bonus) * considerations.length.long.factor);
+		if (value.length >= considerations.length.long.charcount) {
+			//n = (considerations.length.long.factor * value.length) - (considerations.length.medium.factor * considerations.length.medium.charcount);
+			//n += ((considerations.capitalCharacters.count * considerations.capitalCharacters.bonus) * considerations.length.long.factor);
+			//n += ((considerations.specialCharacters.count * considerations.specialCharacters.bonus) * considerations.length.long.factor);
+			//n += ((considerations.numericCharacters.count * considerations.numericCharacters.bonus) * considerations.length.long.factor);
 		}
 
 		return n > 100 ? 100 : n;
-
-
-//if (value.length) {
-
-		//	var score = 0;
-
-		//	for (var i = 0; i < value.length; i += 1) {
-		//		
-		//		
-		//		
-		//		
-		//		
-		//		
-		//	}
-		//}
-
-
-//var threshold = 18;
-
-		//var maximum = {
-		//	'strong': isCommon ? 50 : 100,
-		//	'medium': isCommon ? 30 : 60,
-		//	'weak': isCommon ? 15 : 30
-		//}
-
-		//var bonus = {
-		//	'specialCharacters': 5 * (value.replace(/[^\w\s]/gi, '').length !== value.length ? value.match(/[^\w\s]/gi, '').length : 0),
-		//	'capitalCharacters': 3 * (/[A-Z]/.test(value) ? value.replace(/[^A-Z]/g, '').length : 0),
-		//	'increment': value.length > threshold ? 2* (value.length - threshold) : 0
-		//}
-
-		//var n = 4 * (value.length) + bonus.specialCharacters + bonus.capitalCharacters;
-
-		//switch(strength) {
-		//	case 2: n = n > maximum.strong ? maximum.strong : n; break;
-		//	case 1: n = n > maximum.medium ? maximum.medium : n; break;
-		//	case 0: n = n > maximum.weak ? maximum.weak : n; break;
-		//}
-
-		//n = n + bonus.increment;
-
-		//return n > 100 ? 100 : n;
-
-		//return value.length;
 	}
 
 	function analyze(value) {
