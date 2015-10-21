@@ -40,8 +40,8 @@ angular.module('ngPasscheck', []).directive('passCheck', function ($compile, pas
 		$get: function () {
 			return {
 				regex: {
-					strong: this.regex && this.regex.strong ? this.regex.strong : new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{9,})'),
-					medium: this.regex && this.regex.medium ? this.regex.medium : new RegExp('^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})'),
+					strong: this.regex && this.regex.strong ? this.regex.strong : /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{9,})/,
+					medium: this.regex && this.regex.medium ? this.regex.medium : /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/
 				},
 				testCommon: this.testCommon || false
 			}
@@ -57,9 +57,13 @@ angular.module('ngPasscheck', []).directive('passCheck', function ($compile, pas
 		return defaults.concat(transform);
 	}
 
-	function getNumericStrength(value, isCommon) {
+	function getNumericStrength(value, isCommon, ruleSatisfication) {
 
 		var n = 0;
+
+		var maximum = ruleSatisfication === 0 ? 40 : ruleSatisfication === 1 ? 65 : 100;
+
+		var minimum = ruleSatisfication === 2 ? 65 : ruleSatisfication === 1 ? 40 : 0;
 
 		var score = {
 			's': { 'characters': 0, 'total': 0 },
@@ -69,13 +73,13 @@ angular.module('ngPasscheck', []).directive('passCheck', function ($compile, pas
 
 		var considerations = {
 			'length': {
-				's': { 'max': 07, 'factor': 2 },
-				'm': { 'max': 14, 'factor': 4 },
-				'l': { 'factor': 6 }
+				's': { 'max': 05, 'factor': 2 },
+				'm': { 'max': 09, 'factor': 4 },
+				'l': { 'factor': 5 }
 			},
-			'specialCharacters': { 'bonus': 0.45, 'count': /[^\w\s]/.test(value) ? value.match(/[^\w\s]/gi, '').length : 0 },
-			'capitalCharacters': { 'bonus': 0.35, 'count': /[A-Z]/.test(value) ? value.match(/[A-Z]+/g).length : 0 },
-			'numericCharacters': { 'bonus': 0.35, 'count': /\d+/.test(value) ? value.match(/\d+/gi, '').length : 0 }
+			'specialCharacters': { 'bonus': 0.25, 'count': /[^\w\s]/.test(value) ? value.match(/[^\w\s]/gi, '').length : 0 },
+			'capitalCharacters': { 'bonus': 0.20, 'count': /[A-Z]/.test(value) ? value.match(/[A-Z]+/g).length : 0 },
+			'numericCharacters': { 'bonus': 0.20, 'count': /\d+/.test(value) ? value.match(/\d+/gi, '').length : 0 }
 		}
 
 		if (value.length <= considerations.length.s.max) {
@@ -104,7 +108,13 @@ angular.module('ngPasscheck', []).directive('passCheck', function ($compile, pas
 		(score.m.total * considerations.length.m.factor) +
 		(score.l.total * considerations.length.l.factor)) * bonus;
 
-		return isCommon ? n > 100 ? 100 : Math.round(n / 2) : n > 100 ? 100 : Math.round(n);
+		n = isCommon ? n > 100 ? 100 : Math.round(n / 2) : n > 100 ? 100 : Math.round(n);
+
+		n = n > maximum ? maximum : n;
+
+		n = n < minimum ? minimum : n;
+
+		return n;
 	}
 
 	function analyze(value) {
@@ -116,17 +126,22 @@ angular.module('ngPasscheck', []).directive('passCheck', function ($compile, pas
 			'score': 0
 		};
 
+		var ruleSatisfication = 0;
+
 		var isCommon = passCheck.testCommon ? dictionary.indexOf(passFormat === 'crc32' ? value.crc32() : value) > -1 ? true : false : false;
 
 		if (passCheck.regex.strong.test(value)) {
 			result.strong = true;
+			ruleSatisfication = 2;
 		} else if (passCheck.regex.medium.test(value)) {
 			result.medium = true;
+			ruleSatisfication = 1;
+			console.log('medium');
 		} else {
 			result.weak = true;
 		}
 
-		result.score = getNumericStrength(value, isCommon);
+		result.score = getNumericStrength(value, isCommon, ruleSatisfication);
 
 		return result;
 	}
