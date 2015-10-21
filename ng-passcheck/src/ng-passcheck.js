@@ -59,32 +59,93 @@ angular.module('ngPasscheck', []).directive('passCheck', function ($compile, pas
 
 	function getNumericStrength(value, strength, isCommon) {
 
-		var maximum = {
-			'strong': isCommon ? 50 : 100,
-			'medium': isCommon ? 30 : 60,
-			'weak': isCommon ? 15 : 30
+		var n = 0;
+
+		var considerations = {
+			'length': {
+				'short': { 'min': 8, 'factor': 2 },
+				'medium': { 'min': 16, 'factor': 4 },
+				'long': { 'min': 24, 'factor': 6 }
+			},
+			'specialCharacters': {
+				'count': value.replace(/[^\w\s]/gi, '').length !== value.length ? value.match(/[^\w\s]/gi, '').length : 0,
+				'bonus': 2
+			},
+			'capitalCharacters': {
+				'count': /[A-Z]/.test(value) ? value.replace(/[^A-Z]/g, '').length : 0,
+				'bonus': 2
+			}
 		}
 
-		var bonus = {
-			'specialCharacters': 10 * (value.replace(/[^\w\s]/gi, '').length !== value.length ? value.match(/[^\w\s]/gi, '').length : 0),
-			'capitalCharacters': 5 * (/[A-Z]/.test(value) ? value.replace(/[^A-Z]/g, '').length : 0)
+		if (value.length <= considerations.length.short.min) {
+			n = considerations.length.short.factor * value.length;
+			n += ((considerations.capitalCharacters.count * considerations.capitalCharacters.bonus) * considerations.length.short.factor);
+			n += ((considerations.specialCharacters.count * considerations.specialCharacters.bonus) * considerations.length.short.factor);
 		}
-
-		var n = (value.length * 5) + bonus.specialCharacters + bonus.capitalCharacters;
-
-		switch(strength) {
-			case 2:
-				n = n > maximum.strong ? maximum.strong : n;
-				break;
-			case 1:
-				n = n > maximum.medium ? maximum.medium : n;
-				break;
-			case 0:
-				n = n > maximum.weak ? maximum.weak : n;
-				break;
+			
+		if (value.length > considerations.length.short.min && value.length < considerations.length.long.min) {
+			n = (considerations.length.medium.factor * value.length) - (considerations.length.short.factor * considerations.length.short.min);
+			n += ((considerations.capitalCharacters.count * considerations.capitalCharacters.bonus) * considerations.length.medium.factor);
+			n += ((considerations.specialCharacters.count * considerations.specialCharacters.bonus) * considerations.length.medium.factor);
 		}
-
+		
+		if (value.length >= considerations.length.long.min) {
+			n = (considerations.length.long.factor * value.length) - (considerations.length.medium.factor * considerations.length.medium.min);
+			n += ((considerations.capitalCharacters.count * considerations.capitalCharacters.bonus) * considerations.length.long.factor);
+			n += ((considerations.specialCharacters.count * considerations.specialCharacters.bonus) * considerations.length.long.factor);
+		}
+			
 		return n;
+		
+		
+
+		
+		//if (value.length) {
+
+		//	var score = 0;
+
+		//	for (var i = 0; i < value.length; i += 1) {
+		//		
+		//		
+		//		
+		//		
+		//		
+		//		
+		//	}
+		//}
+
+		
+
+		
+
+
+		//var threshold = 18;
+
+		//var maximum = {
+		//	'strong': isCommon ? 50 : 100,
+		//	'medium': isCommon ? 30 : 60,
+		//	'weak': isCommon ? 15 : 30
+		//}
+
+		//var bonus = {
+		//	'specialCharacters': 5 * (value.replace(/[^\w\s]/gi, '').length !== value.length ? value.match(/[^\w\s]/gi, '').length : 0),
+		//	'capitalCharacters': 3 * (/[A-Z]/.test(value) ? value.replace(/[^A-Z]/g, '').length : 0),
+		//	'increment': value.length > threshold ? 2* (value.length - threshold) : 0
+		//}
+
+		//var n = 4 * (value.length) + bonus.specialCharacters + bonus.capitalCharacters;
+
+		//switch(strength) {
+		//	case 2: n = n > maximum.strong ? maximum.strong : n; break;
+		//	case 1: n = n > maximum.medium ? maximum.medium : n; break;
+		//	case 0: n = n > maximum.weak ? maximum.weak : n; break;
+		//}
+
+		//n = n + bonus.increment;
+
+		//return n > 100 ? 100 : n;
+
+		//return value.length;
 	}
 
 	function analyze(value) {
