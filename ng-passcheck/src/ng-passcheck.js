@@ -21,7 +21,7 @@ angular.module('ngPasscheck', []).directive('passCheck', function ($compile, pas
 				elem.after(angular.element($compile('<span ng-class="{\'weak\' : result.strength === 0, \'medium\' : result.strength === 1, \'strong\' : result.strength === 2}">{{ result.numeric }}</span>')(scope)));
 
 				scope.$watch('password', function (n) {
-					
+
 					scope.result = n ? passCheckService.analyze(n) : null;
 				});
 			});
@@ -57,55 +57,54 @@ angular.module('ngPasscheck', []).directive('passCheck', function ($compile, pas
 		return defaults.concat(transform);
 	}
 
-	function getNumericStrength(value, strength, isCommon) {
+	function getNumericStrength(value, isCommon) {
 
 		var n = 0;
 
+		var score = {
+			's': { 'characters': 0, 'total': 0 },
+			'm': { 'characters': 0, 'total': 0 },
+			'l': { 'characters': 0, 'total': 0 }
+		}
+
 		var considerations = {
 			'length': {
-				'short':
-					{ 'charcount': 08, 'factor': 2 },
-				'medium':
-					{ 'charcount': 14, 'factor': 3 },
-				'long':
-					{ 'charcount': 20, 'factor': 5 }
+				's': { 'max': 07, 'factor': 2 },
+				'm': { 'max': 14, 'factor': 4 },
+				'l': { 'factor': 6 }
 			},
-			'specialCharacters': {
-				'count': /[^\w\s]/.test(value) ? value.match(/[^\w\s]/gi, '').length : 0,
-				'bonus': 2
-			},
-			'capitalCharacters': {
-				'count': /[A-Z]/.test(value) ? value.match(/[A-Z]+/g).length : 0,
-				'bonus': 1.5
-			},
-			'numericCharacters': {
-				'count': /\d+/.test(value) ? value.match(/\d+/gi, '').length : 0,
-				'bonus': 1.5
-			}
+			'specialCharacters': { 'bonus': 0.35, 'count': /[^\w\s]/.test(value) ? value.match(/[^\w\s]/gi, '').length : 0 },
+			'capitalCharacters': { 'bonus': 0.25, 'count': /[A-Z]/.test(value) ? value.match(/[A-Z]+/g).length : 0 },
+			'numericCharacters': { 'bonus': 0.25, 'count': /\d+/.test(value) ? value.match(/\d+/gi, '').length : 0 }
 		}
 
-		if (value.length <= considerations.length.short.charcount) {
-			//n = considerations.length.short.factor * value.length;
-			//n += ((considerations.capitalCharacters.count * considerations.capitalCharacters.bonus) * considerations.length.short.factor);
-			//n += ((considerations.specialCharacters.count * considerations.specialCharacters.bonus) * considerations.length.short.factor);
-			//n += ((considerations.numericCharacters.count * considerations.numericCharacters.bonus) * considerations.length.short.factor);
-		}
-			
-		if (value.length > considerations.length.short.charcount && value.length < considerations.length.long.charcount) {
-			//n = (considerations.length.medium.factor * value.length) - (considerations.length.short.factor * considerations.length.short.charcount);
-			//n += ((considerations.capitalCharacters.count * considerations.capitalCharacters.bonus) * considerations.length.medium.factor);
-			//n += ((considerations.specialCharacters.count * considerations.specialCharacters.bonus) * considerations.length.medium.factor);
-			//n += ((considerations.numericCharacters.count * considerations.numericCharacters.bonus) * considerations.length.medium.factor);
-		}
-		
-		if (value.length >= considerations.length.long.charcount) {
-			//n = (considerations.length.long.factor * value.length) - (considerations.length.medium.factor * considerations.length.medium.charcount);
-			//n += ((considerations.capitalCharacters.count * considerations.capitalCharacters.bonus) * considerations.length.long.factor);
-			//n += ((considerations.specialCharacters.count * considerations.specialCharacters.bonus) * considerations.length.long.factor);
-			//n += ((considerations.numericCharacters.count * considerations.numericCharacters.bonus) * considerations.length.long.factor);
+		if (value.length <= considerations.length.s.max) {
+			score.s.total = value.length;
+			score.bonus = considerations.specialCharacters.count * considerations.length.s.factor;
 		}
 
-		return n > 100 ? 100 : n;
+		if (value.length > considerations.length.s.max && value.length <= considerations.length.m.max) {
+			score.s.total = considerations.length.s.max;
+			score.m.total = value.length - considerations.length.s.max;
+		}
+
+		if (value.length > considerations.length.m.max) {
+			score.s.total = considerations.length.s.max;
+			score.m.total = considerations.length.m.max - considerations.length.s.max;
+			score.l.total = value.length - considerations.length.m.max;
+		}
+
+		var bonus = 1 +
+		((considerations.specialCharacters.count * considerations.specialCharacters.bonus) +
+		(considerations.capitalCharacters.count * considerations.capitalCharacters.bonus) +
+		(considerations.numericCharacters.count * considerations.numericCharacters.bonus));
+
+		n =
+		((score.s.total * considerations.length.s.factor) +
+		(score.m.total * considerations.length.m.factor) +
+		(score.l.total * considerations.length.l.factor)) * bonus;
+
+		return isCommon ? n > 100 ? 100 : Math.round(n / 2) : n > 100 ? 100 : Math.round(n);
 	}
 
 	function analyze(value) {
@@ -125,14 +124,14 @@ angular.module('ngPasscheck', []).directive('passCheck', function ($compile, pas
 			result.description = 'weak sauce';
 		}
 
-		result.numeric = getNumericStrength(value, result.strength, isCommon);
+		result.numeric = getNumericStrength(value, isCommon);
 
 		return result;
 	}
 
 	function init(data) {
 		dictionary = data;
-		$timeout(function() {
+		$timeout(function () {
 			$rootScope.$broadcast('passCheckService:init');
 		});
 	}
