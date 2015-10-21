@@ -94,13 +94,11 @@ angular.module('ngPasscheck', []).directive('passCheck', function ($compile, pas
 			n += ((considerations.capitalCharacters.count * considerations.capitalCharacters.bonus) * considerations.length.long.factor);
 			n += ((considerations.specialCharacters.count * considerations.specialCharacters.bonus) * considerations.length.long.factor);
 		}
-			
-		return n;
-		
-		
 
-		
-		//if (value.length) {
+		return n > 100 ? 100 : n;
+
+
+//if (value.length) {
 
 		//	var score = 0;
 
@@ -114,12 +112,8 @@ angular.module('ngPasscheck', []).directive('passCheck', function ($compile, pas
 		//	}
 		//}
 
-		
 
-		
-
-
-		//var threshold = 18;
+//var threshold = 18;
 
 		//var maximum = {
 		//	'strong': isCommon ? 50 : 100,
