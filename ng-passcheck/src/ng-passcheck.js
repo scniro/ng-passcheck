@@ -59,60 +59,97 @@ angular.module('ngPasscheck', []).directive('passCheck', function ($compile, pas
 
 	function getNumericStrength(value, isCommon, ruleSatisfication) {
 
-		var n = 0;
+		var n = value.length;
 
-		var maximum = ruleSatisfication === 0 ? 40 : ruleSatisfication === 1 ? 65 : 100;
+		var maximum = ruleSatisfication === 0 ? 30 : ruleSatisfication === 1 ? 70 : 100;
 
-		var minimum = ruleSatisfication === 2 ? 65 : ruleSatisfication === 1 ? 40 : 0;
+		var minimum = ruleSatisfication === 2 ? 70 : ruleSatisfication === 1 ? 40 : 0;
 
-		var score = {
-			's': { 'characters': 0, 'total': 0 },
-			'm': { 'characters': 0, 'total': 0 },
-			'l': { 'characters': 0, 'total': 0 }
-		}
+		n = n < minimum ? minimum : n > maximum ? maximum : n;
 
-		var considerations = {
-			'length': {
-				's': { 'max': 05, 'factor': 2 },
-				'm': { 'max': 09, 'factor': 4 },
-				'l': { 'factor': 5 }
-			},
-			'specialCharacters': { 'bonus': 0.25, 'count': /[^\w\s]/.test(value) ? value.match(/[^\w\s]/gi, '').length : 0 },
-			'capitalCharacters': { 'bonus': 0.20, 'count': /[A-Z]/.test(value) ? value.match(/[A-Z]+/g).length : 0 },
-			'numericCharacters': { 'bonus': 0.20, 'count': /\d+/.test(value) ? value.match(/\d+/gi, '').length : 0 }
-		}
+		return n;
 
-		if (value.length <= considerations.length.s.max) {
-			score.s.total = value.length;
-			score.bonus = considerations.specialCharacters.count * considerations.length.s.factor;
-		}
+		//var considerations = {
+		//	'length': {
+		//		's': { 'max': 05, 'factor': 2 },
+		//		'm': { 'max': 09, 'factor': 4 },
+		//		'l': { 'factor': 5 }
+		//	},
+		//	'specialCharacters': { 'bonus': 0.25, 'count': /[^\w\s]/.test(value) ? value.match(/[^\w\s]/gi, '').length : 0 },
+		//	'capitalCharacters': { 'bonus': 0.20, 'count': /[A-Z]/.test(value) ? value.match(/[A-Z]+/g).length : 0 },
+		//	'numericCharacters': { 'bonus': 0.20, 'count': /\d+/.test(value) ? value.match(/\d+/gi, '').length : 0 }
+		//}
 
-		if (value.length > considerations.length.s.max && value.length <= considerations.length.m.max) {
-			score.s.total = considerations.length.s.max;
-			score.m.total = value.length - considerations.length.s.max;
-		}
+		//if (value.length <= considerations.length.s.max) {
+		//	score.s.total = value.length;
+		//	score.bonus = considerations.specialCharacters.count * considerations.length.s.factor;
+		//}
 
-		if (value.length > considerations.length.m.max) {
-			score.s.total = considerations.length.s.max;
-			score.m.total = considerations.length.m.max - considerations.length.s.max;
-			score.l.total = value.length - considerations.length.m.max;
-		}
+		//if (value.length > considerations.length.s.max && value.length <= considerations.length.m.max) {
+		//	console.log(value.length)
+		//	score.s.total = considerations.length.s.max;
+		//	score.m.total = value.length - considerations.length.s.max;
+		//}
 
-		var bonus = 1 +
-		((considerations.specialCharacters.count * considerations.specialCharacters.bonus) +
-		(considerations.capitalCharacters.count * considerations.capitalCharacters.bonus) +
-		(considerations.numericCharacters.count * considerations.numericCharacters.bonus));
+		//if (value.length > considerations.length.m.max) {
+		//	score.s.total = considerations.length.s.max;
+		//	score.m.total = considerations.length.m.max - considerations.length.s.max;
+		//	score.l.total = value.length - considerations.length.m.max;
+		//}
 
-		n =
-		((score.s.total * considerations.length.s.factor) +
-		(score.m.total * considerations.length.m.factor) +
-		(score.l.total * considerations.length.l.factor)) * bonus;
+		return minimum;
 
-		n = isCommon ? n > 100 ? 100 : Math.round(n / 2) : n > 100 ? 100 : Math.round(n);
+		//var score = {
+		//	's': { 'characters': 0, 'total': 0 },
+		//	'm': { 'characters': 0, 'total': 0 },
+		//	'l': { 'characters': 0, 'total': 0 }
+		//}
 
-		n = n > maximum ? maximum : n;
+		//var considerations = {
+		//	'length': {
+		//		's': { 'max': 05, 'factor': 2 },
+		//		'm': { 'max': 09, 'factor': 4 },
+		//		'l': { 'factor': 5 }
+		//	},
+		//	'specialCharacters': { 'bonus': 0.25, 'count': /[^\w\s]/.test(value) ? value.match(/[^\w\s]/gi, '').length : 0 },
+		//	'capitalCharacters': { 'bonus': 0.20, 'count': /[A-Z]/.test(value) ? value.match(/[A-Z]+/g).length : 0 },
+		//	'numericCharacters': { 'bonus': 0.20, 'count': /\d+/.test(value) ? value.match(/\d+/gi, '').length : 0 }
+		//}
 
-		n = n < minimum ? minimum : n;
+		//if (value.length <= considerations.length.s.max) {
+		//	score.s.total = value.length;
+		//	score.bonus = considerations.specialCharacters.count * considerations.length.s.factor;
+		//}
+
+		//if (value.length > considerations.length.s.max && value.length <= considerations.length.m.max) {
+		//	console.log(value.length)
+		//	score.s.total = considerations.length.s.max;
+		//	score.m.total = value.length - considerations.length.s.max;
+		//}
+
+		//if (value.length > considerations.length.m.max) {
+		//	score.s.total = considerations.length.s.max;
+		//	score.m.total = considerations.length.m.max - considerations.length.s.max;
+		//	score.l.total = value.length - considerations.length.m.max;
+		//}
+
+		//var bonus = 1 +
+		//((considerations.specialCharacters.count * considerations.specialCharacters.bonus) +
+		//(considerations.capitalCharacters.count * considerations.capitalCharacters.bonus) +
+		//(considerations.numericCharacters.count * considerations.numericCharacters.bonus));
+
+		//n =
+		//((score.s.total * considerations.length.s.factor) +
+		//(score.m.total * considerations.length.m.factor) +
+		//(score.l.total * considerations.length.l.factor)) * bonus;
+
+		//console.log(bonus);
+
+		//n = isCommon ? n > 100 ? 100 : Math.round(n / 2) : n > 100 ? 100 : Math.round(n);
+
+		//n = n > maximum ? maximum : n;
+
+		//n = n < minimum ? minimum : n;
 
 		return n;
 	}
