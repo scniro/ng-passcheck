@@ -18,7 +18,7 @@ angular.module('ngPasscheck', []).directive('passCheck', function ($compile, pas
 		link: function (scope, elem, attrs) {
 			scope.$on('passCheckService:init', function () {
 
-				elem.after(angular.element($compile('<span ng-class="{\'weak\' : result.strength === 0, \'medium\' : result.strength === 1, \'strong\' : result.strength === 2}">{{ result.numeric }}</span>')(scope)));
+				elem.after(angular.element($compile('<span ng-class="{ \'weak\' : result.weak, \'medium\' : result.medium, \'strong\' : result.strong }">{{ result.score }}</span>')(scope)));
 
 				scope.$watch('password', function (n) {
 
@@ -73,9 +73,9 @@ angular.module('ngPasscheck', []).directive('passCheck', function ($compile, pas
 				'm': { 'max': 14, 'factor': 4 },
 				'l': { 'factor': 6 }
 			},
-			'specialCharacters': { 'bonus': 0.35, 'count': /[^\w\s]/.test(value) ? value.match(/[^\w\s]/gi, '').length : 0 },
-			'capitalCharacters': { 'bonus': 0.25, 'count': /[A-Z]/.test(value) ? value.match(/[A-Z]+/g).length : 0 },
-			'numericCharacters': { 'bonus': 0.25, 'count': /\d+/.test(value) ? value.match(/\d+/gi, '').length : 0 }
+			'specialCharacters': { 'bonus': 0.45, 'count': /[^\w\s]/.test(value) ? value.match(/[^\w\s]/gi, '').length : 0 },
+			'capitalCharacters': { 'bonus': 0.35, 'count': /[A-Z]/.test(value) ? value.match(/[A-Z]+/g).length : 0 },
+			'numericCharacters': { 'bonus': 0.35, 'count': /\d+/.test(value) ? value.match(/\d+/gi, '').length : 0 }
 		}
 
 		if (value.length <= considerations.length.s.max) {
@@ -109,22 +109,24 @@ angular.module('ngPasscheck', []).directive('passCheck', function ($compile, pas
 
 	function analyze(value) {
 
-		var result = {};
+		var result = {
+			'weak': false,
+			'medium': false,
+			'strong': false,
+			'score': 0
+		};
 
 		var isCommon = passCheck.testCommon ? dictionary.indexOf(passFormat === 'crc32' ? value.crc32() : value) > -1 ? true : false : false;
 
 		if (passCheck.regex.strong.test(value)) {
-			result.strength = 2;
-			result.description = 'strong';
+			result.strong = true;
 		} else if (passCheck.regex.medium.test(value)) {
-			result.strength = 1;
-			result.description = 'ehh';
+			result.medium = true;
 		} else {
-			result.strength = 0;
-			result.description = 'weak sauce';
+			result.weak = true;
 		}
 
-		result.numeric = getNumericStrength(value, isCommon);
+		result.score = getNumericStrength(value, isCommon);
 
 		return result;
 	}
