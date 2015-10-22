@@ -10,5 +10,8 @@ app.config(function (passCheckProvider) {
 });
 
 app.controller('ctrl', ['$scope', function($scope) {
-	$scope.init = 'hello init';
+	$scope.$on('myPwd:result', function (event, value) {
+
+		$scope.result = value ? value : null;
+	});
 }]);

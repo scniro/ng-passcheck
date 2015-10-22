@@ -13,16 +13,16 @@ angular.module('ngPasscheck', []).directive('passCheck', function ($compile, pas
 		restrict: 'A',
 		require: 'ngModel',
 		scope: {
-			password: '=ngModel'
+			password: '=ngModel',
+			passCheck: '@'
 		},
 		link: function (scope, elem, attrs) {
 			scope.$on('passCheckService:init', function () {
 
-				elem.after(angular.element($compile('<span ng-class="{ \'weak\' : result.weak, \'medium\' : result.medium, \'strong\' : result.strong }">{{ result.score }}</span>')(scope)));
-
 				scope.$watch('password', function (n) {
 
-					scope.result = n ? passCheckService.analyze(n) : null;
+					var result = n ? passCheckService.analyze(n) : null;
+					scope.$emit(scope.passCheck + ':result', result);
 				});
 			});
 		}

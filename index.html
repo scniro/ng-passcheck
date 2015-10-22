@@ -34,7 +34,7 @@
 	</header>
 
 	<div ng-controller="ctrl">
-		<input type="password" ng-model="pwd" pass-check />
+		<input type="password" ng-model="pwd" pass-check="myPwd"/><span ng-class="{'weak': result.weak, 'medium': result.medium, 'strong': result.strong }">{{ result.score }}</span>
 	</div>
 
 	<script src="demo-site/js/app.js"></script>
