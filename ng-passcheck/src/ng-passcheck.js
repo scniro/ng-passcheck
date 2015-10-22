@@ -59,97 +59,36 @@ angular.module('ngPasscheck', []).directive('passCheck', function ($compile, pas
 
 	function getNumericStrength(value, isCommon, ruleSatisfication) {
 
+		var considerations = {
+			'length': {
+				'weak': { 'min': 0, 'factor': 2 },
+				'medium': { 'min': 6, 'factor': 4 },
+				'strong': { 'min': 9, 'factor': 6 }
+			},
+			'specialCharacters': { 'bonus': 0.25, 'count': /[^\w\s]/.test(value) ? value.match(/[^\w\s]/gi, '').length : 0 },
+			'capitalCharacters': { 'bonus': 0.20, 'count': /[A-Z]/.test(value) ? value.match(/[A-Z]+/g).length : 0 },
+			'numericCharacters': { 'bonus': 0.20, 'count': /\d+/.test(value) ? value.match(/\d+/gi, '').length : 0 }
+		}
+
 		var n = value.length;
 
 		var maximum = ruleSatisfication === 0 ? 30 : ruleSatisfication === 1 ? 70 : 100;
 
 		var minimum = ruleSatisfication === 2 ? 70 : ruleSatisfication === 1 ? 40 : 0;
 
+		if (ruleSatisfication === 0) {
+			n = value.length;
+		}
+
+		if (ruleSatisfication === 1) {
+			n = minimum + (value.length - considerations.length.medium.min);
+		}
+
+		if (ruleSatisfication === 2) {
+			n = minimum + (value.length - considerations.length.strong.min);
+		}
+
 		n = n < minimum ? minimum : n > maximum ? maximum : n;
-
-		return n;
-
-		//var considerations = {
-		//	'length': {
-		//		's': { 'max': 05, 'factor': 2 },
-		//		'm': { 'max': 09, 'factor': 4 },
-		//		'l': { 'factor': 5 }
-		//	},
-		//	'specialCharacters': { 'bonus': 0.25, 'count': /[^\w\s]/.test(value) ? value.match(/[^\w\s]/gi, '').length : 0 },
-		//	'capitalCharacters': { 'bonus': 0.20, 'count': /[A-Z]/.test(value) ? value.match(/[A-Z]+/g).length : 0 },
-		//	'numericCharacters': { 'bonus': 0.20, 'count': /\d+/.test(value) ? value.match(/\d+/gi, '').length : 0 }
-		//}
-
-		//if (value.length <= considerations.length.s.max) {
-		//	score.s.total = value.length;
-		//	score.bonus = considerations.specialCharacters.count * considerations.length.s.factor;
-		//}
-
-		//if (value.length > considerations.length.s.max && value.length <= considerations.length.m.max) {
-		//	console.log(value.length)
-		//	score.s.total = considerations.length.s.max;
-		//	score.m.total = value.length - considerations.length.s.max;
-		//}
-
-		//if (value.length > considerations.length.m.max) {
-		//	score.s.total = considerations.length.s.max;
-		//	score.m.total = considerations.length.m.max - considerations.length.s.max;
-		//	score.l.total = value.length - considerations.length.m.max;
-		//}
-
-		return minimum;
-
-		//var score = {
-		//	's': { 'characters': 0, 'total': 0 },
-		//	'm': { 'characters': 0, 'total': 0 },
-		//	'l': { 'characters': 0, 'total': 0 }
-		//}
-
-		//var considerations = {
-		//	'length': {
-		//		's': { 'max': 05, 'factor': 2 },
-		//		'm': { 'max': 09, 'factor': 4 },
-		//		'l': { 'factor': 5 }
-		//	},
-		//	'specialCharacters': { 'bonus': 0.25, 'count': /[^\w\s]/.test(value) ? value.match(/[^\w\s]/gi, '').length : 0 },
-		//	'capitalCharacters': { 'bonus': 0.20, 'count': /[A-Z]/.test(value) ? value.match(/[A-Z]+/g).length : 0 },
-		//	'numericCharacters': { 'bonus': 0.20, 'count': /\d+/.test(value) ? value.match(/\d+/gi, '').length : 0 }
-		//}
-
-		//if (value.length <= considerations.length.s.max) {
-		//	score.s.total = value.length;
-		//	score.bonus = considerations.specialCharacters.count * considerations.length.s.factor;
-		//}
-
-		//if (value.length > considerations.length.s.max && value.length <= considerations.length.m.max) {
-		//	console.log(value.length)
-		//	score.s.total = considerations.length.s.max;
-		//	score.m.total = value.length - considerations.length.s.max;
-		//}
-
-		//if (value.length > considerations.length.m.max) {
-		//	score.s.total = considerations.length.s.max;
-		//	score.m.total = considerations.length.m.max - considerations.length.s.max;
-		//	score.l.total = value.length - considerations.length.m.max;
-		//}
-
-		//var bonus = 1 +
-		//((considerations.specialCharacters.count * considerations.specialCharacters.bonus) +
-		//(considerations.capitalCharacters.count * considerations.capitalCharacters.bonus) +
-		//(considerations.numericCharacters.count * considerations.numericCharacters.bonus));
-
-		//n =
-		//((score.s.total * considerations.length.s.factor) +
-		//(score.m.total * considerations.length.m.factor) +
-		//(score.l.total * considerations.length.l.factor)) * bonus;
-
-		//console.log(bonus);
-
-		//n = isCommon ? n > 100 ? 100 : Math.round(n / 2) : n > 100 ? 100 : Math.round(n);
-
-		//n = n > maximum ? maximum : n;
-
-		//n = n < minimum ? minimum : n;
 
 		return n;
 	}
