@@ -46,3 +46,38 @@ header {
       header a:nth-child(2):hover {
         -webkit-transform: translateY(-1.875em);
         transform: translateY(-1.875em); }
+
+.content {
+  height: 20.000em;
+  padding: 2.000em; }
+  .content h2 {
+    margin-top: 0; }
+  .content section.pane {
+    width: 50%;
+    box-sizing: border-box;
+    padding-right: 2.000em; }
+    .content section.pane.left {
+      float: left; }
+    .content section.pane.right {
+      float: right; }
+  .content .example input {
+    width: 100%;
+    margin: 0 auto;
+    display: block;
+    font-size: 20pt;
+    margin-bottom: 1.500em;
+    border-radius: 0.500em;
+    border: none;
+    border: solid 1px #CCC;
+    padding: 0.500em;
+    letter-spacing: 0.500em;
+    transition: border-color 0.3s, color 0.3s;
+    border: solid 2px #CCC; }
+    .content .example input.weak {
+      border-color: red; }
+    .content .example input.medium {
+      border-color: orange; }
+    .content .example input.strong {
+      border-color: green; }
+    .content .example input:focus {
+      outline: none; }

@@ -138,6 +138,7 @@ angular.module('ngPasscheck', [])
 		} else {
 			result.score = 0;
 			result.weak = true;
+			result.isCommon = true;
 		}
 
 		return result;
