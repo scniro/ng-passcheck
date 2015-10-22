@@ -5,24 +5,24 @@
 	<title>ngPasscheck</title>
 
 	<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans">
-	<link rel="stylesheet" href="demo-site/css/style.css"/>
+	<link rel="stylesheet" href="demo-site/css/style.css" />
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
 </head>
 <body>
-<style>
-	.weak {
-		color: red;
-	}
+	<style>
+		.weak {
+			color: red;
+		}
 
-	.medium {
-		color: orange;
-	}
+		.medium {
+			color: orange;
+		}
 
-	.strong {
-		color: green;
-	}
-</style>
+		.strong {
+			color: green;
+		}
+	</style>
 	<header>
 		<h1>
 			ngPasscheck
@@ -34,7 +34,7 @@
 	</header>
 
 	<div ng-controller="ctrl">
-		<input type="password" ng-model="pwd" pass-check="myPwd"/><span ng-class="{'weak': result.weak, 'medium': result.medium, 'strong': result.strong }">{{ result.score }}</span>
+		<input type="password" ng-model="pwd" pass-check="myPwd" /><span ng-class="{'weak': result.weak, 'medium': result.medium, 'strong': result.strong }">{{ result.score }}</span>
 	</div>
 
 	<script src="demo-site/js/app.js"></script>

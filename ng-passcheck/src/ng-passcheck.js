@@ -8,7 +8,8 @@ String.prototype.crc32 = function () {
 	}
 	return (crc ^ (-1)) >>> 0;
 }
-angular.module('ngPasscheck', []).directive('passCheck', function ($compile, passCheckService) {
+angular.module('ngPasscheck', [])
+.directive('passCheck', ['passCheckService', function (passCheckService) {
 	return {
 		restrict: 'A',
 		require: 'ngModel',
@@ -27,7 +28,8 @@ angular.module('ngPasscheck', []).directive('passCheck', function ($compile, pas
 			});
 		}
 	}
-}).provider('passCheck', function () {
+}])
+.provider('passCheck', [function () {
 	return {
 		init: function (options) {
 			this.regex = {
@@ -47,8 +49,8 @@ angular.module('ngPasscheck', []).directive('passCheck', function ($compile, pas
 			}
 		}
 	}
-})
-.factory('passCheckService', function (passCheck, $http, $rootScope, $timeout) {
+}])
+.factory('passCheckService', ['passCheck', '$http', '$rootScope', '$timeout', function (passCheck, $http, $rootScope, $timeout) {
 
 	var dictionary, passFormat;
 
@@ -164,4 +166,5 @@ angular.module('ngPasscheck', []).directive('passCheck', function ($compile, pas
 	return {
 		'analyze': analyze
 	}
-})
+}
+]);
