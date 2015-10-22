@@ -41,7 +41,7 @@ angular.module('ngPasscheck', []).directive('passCheck', function ($compile, pas
 			return {
 				regex: {
 					strong: this.regex && this.regex.strong ? this.regex.strong : /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{9,})/,
-					medium: this.regex && this.regex.medium ? this.regex.medium : /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/
+					medium: this.regex && this.regex.medium ? this.regex.medium : /^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})/
 				},
 				testCommon: this.testCommon || false
 			}
@@ -57,18 +57,20 @@ angular.module('ngPasscheck', []).directive('passCheck', function ($compile, pas
 		return defaults.concat(transform);
 	}
 
-	function getNumericStrength(value, isCommon, ruleSatisfication) {
+	function getNumericStrength(value, ruleSatisfication) {
 
 		var considerations = {
 			'length': {
-				'weak': { 'min': 0, 'factor': 2 },
-				'medium': { 'min': 6, 'factor': 4 },
-				'strong': { 'min': 9, 'factor': 6 }
+				'weak': { 'min': 0, 'factor': 1 },
+				'medium': { 'min': 6, 'factor': 2 },
+				'strong': { 'min': 9, 'factor': 4 }
 			},
-			'specialCharacters': { 'bonus': 0.25, 'count': /[^\w\s]/.test(value) ? value.match(/[^\w\s]/gi, '').length : 0 },
-			'capitalCharacters': { 'bonus': 0.20, 'count': /[A-Z]/.test(value) ? value.match(/[A-Z]+/g).length : 0 },
-			'numericCharacters': { 'bonus': 0.20, 'count': /\d+/.test(value) ? value.match(/\d+/gi, '').length : 0 }
+			'specialCharacters': { 'count': /[^\w\s]/.test(value) ? value.match(/[^\w\s]/g).length : 0 },
+			'capitalCharacters': { 'count': /[A-Z]/.test(value) ? value.match(/[A-Z]/g).length : 0 },
+			'numericCharacters': { 'count': /\d+/.test(value) ? value.match(/\d/g).length : 0 }
 		}
+
+		var bonus = 0;
 
 		var n = value.length;
 
@@ -78,14 +80,26 @@ angular.module('ngPasscheck', []).directive('passCheck', function ($compile, pas
 
 		if (ruleSatisfication === 0) {
 			n = value.length;
+			bonus += considerations.numericCharacters.count * considerations.length.weak.factor;
+			bonus += considerations.specialCharacters.count * considerations.length.weak.factor;
+			bonus += considerations.capitalCharacters.count * considerations.length.weak.factor;
+			n += bonus;
 		}
 
 		if (ruleSatisfication === 1) {
 			n = minimum + (value.length - considerations.length.medium.min);
+			bonus += considerations.numericCharacters.count > 1 ? ((considerations.numericCharacters.count - 1) * considerations.length.medium.factor) : 0;
+			bonus += considerations.capitalCharacters.count > 1 ? ((considerations.capitalCharacters.count - 1) * considerations.length.medium.factor) : 0;
+			bonus += considerations.specialCharacters.count * considerations.length.medium.factor;
+			n += bonus;
 		}
 
 		if (ruleSatisfication === 2) {
 			n = minimum + (value.length - considerations.length.strong.min);
+			bonus += considerations.numericCharacters.count > 1 ? ((considerations.numericCharacters.count - 1) * considerations.length.strong.factor) : 0;
+			bonus += considerations.capitalCharacters.count > 1 ? ((considerations.capitalCharacters.count - 1) * considerations.length.strong.factor) : 0;
+			bonus += considerations.specialCharacters.count > 1 ? ((considerations.specialCharacters.count - 1) * considerations.length.strong.factor) : 0;
+			n += bonus;
 		}
 
 		n = n < minimum ? minimum : n > maximum ? maximum : n;
@@ -106,18 +120,23 @@ angular.module('ngPasscheck', []).directive('passCheck', function ($compile, pas
 
 		var isCommon = passCheck.testCommon ? dictionary.indexOf(passFormat === 'crc32' ? value.crc32() : value) > -1 ? true : false : false;
 
-		if (passCheck.regex.strong.test(value)) {
-			result.strong = true;
-			ruleSatisfication = 2;
-		} else if (passCheck.regex.medium.test(value)) {
-			result.medium = true;
-			ruleSatisfication = 1;
-			console.log('medium');
+		if (!isCommon) {
+			if (passCheck.regex.strong.test(value)) {
+				result.strong = true;
+				ruleSatisfication = 2;
+			} else if (passCheck.regex.medium.test(value)) {
+				result.medium = true;
+				ruleSatisfication = 1;
+				console.log('medium');
+			} else {
+				result.weak = true;
+			}
+
+			result.score = getNumericStrength(value, ruleSatisfication);
 		} else {
+			result.score = 0;
 			result.weak = true;
 		}
-
-		result.score = getNumericStrength(value, isCommon, ruleSatisfication);
 
 		return result;
 	}
