@@ -33,6 +33,14 @@ angular.module('ngPasscheck', [])
 	return {
 		init: function (options) {
 
+			this.increments = {
+				base: options.increments && options.increments.base ? options.increments.base : null,
+				bonus: {
+					medium: options.increments && options.increments.bonus && options.increments.bonus.medium ? options.increments.bonus.medium : null,
+					strong: options.increments && options.increments.bonus && options.increments.bonus.strong ? options.increments.bonus.strong : null
+				}
+			}
+
 			this.policies = {
 				medium: {
 					pattern: options.policies && options.policies.medium && options.policies.medium.pattern ? options.policies.medium.pattern : null,
@@ -48,6 +56,13 @@ angular.module('ngPasscheck', [])
 		},
 		$get: function () {
 			return {
+				increments: {
+					base: this.increments.base ? this.increments.base : 1,
+					bonus: {
+						medium: this.increments.bonus.medium ? this.increments.bonus.medium : 1.25,
+						strong: this.increments.bonus.strong ? this.increments.bonus.strong : 1.50
+					}
+				},
 				policies: {
 					medium: {
 						pattern: this.policies.medium.pattern ? this.policies.medium.pattern : '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])',
@@ -74,12 +89,7 @@ angular.module('ngPasscheck', [])
 
 	function getNumericStrength(value, ruleSatisfication) {
 
-		var considerations = {
-			'length': {
-				'weak': { 'min': 0, 'factor': 1.00 },
-				'medium': { 'min': passCheck.policies.medium.minimum, 'factor': 1.25 },
-				'strong': { 'min': passCheck.policies.strong.minimum, 'factor': 1.50 }
-			},
+		var special = {
 			'specialCharacters': { 'count': /[^\w\s]/.test(value) ? value.match(/[^\w\s]/g).length : 0 },
 			'capitalCharacters': { 'count': /[A-Z]/.test(value) ? value.match(/[A-Z]/g).length : 0 },
 			'numericCharacters': { 'count': /\d+/.test(value) ? value.match(/\d/g).length : 0 }
@@ -94,32 +104,28 @@ angular.module('ngPasscheck', [])
 		var minimum = ruleSatisfication === 2 ? 65 : ruleSatisfication === 1 ? 40 : 0;
 
 		if (ruleSatisfication === 0) {
-			n = value.length;
-			bonus += considerations.numericCharacters.count * considerations.length.weak.factor;
-			bonus += considerations.specialCharacters.count * considerations.length.weak.factor;
-			bonus += considerations.capitalCharacters.count * considerations.length.weak.factor;
-			n += bonus;
+			n = (value.length * passCheck.increments.base);
 		}
 
 		if (ruleSatisfication === 1) {
-			n = minimum + (value.length - considerations.length.medium.min);
+			n = minimum + (value.length * passCheck.increments.base);
 
-			if (value.length > considerations.length.medium.min) {
-				bonus += considerations.numericCharacters.count * considerations.length.medium.factor;
-				bonus += considerations.specialCharacters.count * considerations.length.medium.factor;
-				bonus += considerations.capitalCharacters.count * considerations.length.medium.factor;
+			if (value.length > passCheck.policies.medium.minimum) {
+				bonus += special.numericCharacters.count * passCheck.increments.bonus.medium;
+				bonus += special.specialCharacters.count * passCheck.increments.bonus.medium;
+				bonus += special.capitalCharacters.count * passCheck.increments.bonus.medium;
 			}
 
 			n += bonus;
 		}
 
 		if (ruleSatisfication === 2) {
-			n = minimum + (value.length - considerations.length.strong.min);
+			n = minimum + ((value.length * passCheck.increments.base) - passCheck.policies.strong.minimum);
 
-			if (value.length > considerations.length.strong.min) {
-				bonus += considerations.numericCharacters.count * considerations.length.strong.factor;
-				bonus += considerations.specialCharacters.count * considerations.length.strong.factor;
-				bonus += considerations.capitalCharacters.count * considerations.length.strong.factor;
+			if (value.length > passCheck.policies.strong.minimum) {
+				bonus += special.numericCharacters.count * passCheck.increments.bonus.strong;
+				bonus += special.specialCharacters.count * passCheck.increments.bonus.strong;
+				bonus += special.capitalCharacters.count * passCheck.increments.bonus.strong;
 			}
 
 			n += bonus;
