@@ -1,5 +1,12 @@
 ﻿<div><pre><code prism class="language-javascript">module.config(['passCheckProvider', function (passCheckProvider) {
 	passCheckProvider.init({
+		increments: { // optional. defaults shown.
+			base: 1,
+			bonus: {
+				medium: 1.25
+				strong: 1.50
+			}
+		},
 		policies: { // optional. defaults shown. shortcut syntax such as \d must be escaped as \\d
 			medium: {
 				pattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])',
@@ -13,13 +20,6 @@
 		testCommon: { // do not specify this configuration to skip common checks
 			path: '~/passwords.json', // optionally, passwords-hashed.json
 			limit: 10000
-		},
-		increments: { // optional. defaults shown.
-			base: 1,
-			bonus: {
-				medium: 1.25
-				strong: 1.50
-			}
 		}
 	});
 }]);
