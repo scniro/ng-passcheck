@@ -1,0 +1,20 @@
+﻿<div><pre><code prism class="language-javascript">module.config(['passCheckProvider', function (passCheckProvider) {
+	passCheckProvider.init({
+		policies: { // defaults - shortcut syntax such as \d must be escaped as \\d
+			medium: {
+				pattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])',
+				minimum: 8
+			},
+			strong: {
+				pattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\\w\\s])',
+				minimum: 12
+			}
+		},
+		testCommon: { // do not specify this configuration to skip common checks
+			path: '~/passwords.json', // optionally, passwords-hashed.json
+			limit: 10000
+		}
+	});
+}]);
+</code></pre>
+</div>

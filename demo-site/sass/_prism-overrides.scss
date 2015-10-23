@@ -1,0 +1,12 @@
+﻿pre, code {
+	font-size: 10pt;
+}
+
+pre[class*="language-shell"] {
+	background-color: #383838;
+
+	code {
+		text-shadow: none;
+		color: white;
+	}
+}

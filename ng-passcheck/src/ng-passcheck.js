@@ -32,18 +32,31 @@ angular.module('ngPasscheck', [])
 .provider('passCheck', [function () {
 	return {
 		init: function (options) {
-			this.regex = {
-				'strong': options.regex ? options.regex.strong : null,
-				'medium': options.regex ? options.regex.medium : null
+
+			this.policies = {
+				medium: {
+					pattern: options.policies && options.policies.medium && options.policies.medium.pattern ? options.policies.medium.pattern : null,
+					minimum: options.policies && options.policies.medium && options.policies.medium.minimum ? options.policies.medium.minimum : null
+				},
+				strong: {
+					pattern: options.policies && options.policies.strong && options.policies.strong.pattern ? options.policies.strong.pattern : null,
+					minimum: options.policies && options.policies.strong && options.policies.strong.minimum ? options.policies.strong.minimum : null
+				}
 			}
 
 			this.testCommon = options.testCommon ? { 'path': options.testCommon.path, 'limit': options.testCommon.limit } : null;
 		},
 		$get: function () {
 			return {
-				regex: {
-					strong: this.regex && this.regex.strong ? this.regex.strong : /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{9,})/,
-					medium: this.regex && this.regex.medium ? this.regex.medium : /^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})/
+				policies: {
+					medium: {
+						pattern: this.policies.medium.pattern ? this.policies.medium.pattern : '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])',
+						minimum: this.policies.medium.minimum ? this.policies.medium.minimum : 8
+					},
+					strong: {
+						pattern: this.policies.strong.pattern ? this.policies.strong.pattern : '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\\w\\s])',
+						minimum: this.policies.strong.minimum ? this.policies.strong.minimum : 12
+					}
 				},
 				testCommon: this.testCommon || false
 			}
@@ -63,9 +76,9 @@ angular.module('ngPasscheck', [])
 
 		var considerations = {
 			'length': {
-				'weak': { 'min': 0, 'factor': 1 },
-				'medium': { 'min': 6, 'factor': 2 },
-				'strong': { 'min': 9, 'factor': 4 }
+				'weak': { 'min': 0, 'factor': 1.00 },
+				'medium': { 'min': passCheck.policies.medium.minimum, 'factor': 1.25 },
+				'strong': { 'min': passCheck.policies.strong.minimum, 'factor': 1.50 }
 			},
 			'specialCharacters': { 'count': /[^\w\s]/.test(value) ? value.match(/[^\w\s]/g).length : 0 },
 			'capitalCharacters': { 'count': /[A-Z]/.test(value) ? value.match(/[A-Z]/g).length : 0 },
@@ -76,9 +89,9 @@ angular.module('ngPasscheck', [])
 
 		var n = value.length;
 
-		var maximum = ruleSatisfication === 0 ? 30 : ruleSatisfication === 1 ? 70 : 100;
+		var maximum = ruleSatisfication === 0 ? 30 : ruleSatisfication === 1 ? 65 : 100;
 
-		var minimum = ruleSatisfication === 2 ? 70 : ruleSatisfication === 1 ? 40 : 0;
+		var minimum = ruleSatisfication === 2 ? 65 : ruleSatisfication === 1 ? 40 : 0;
 
 		if (ruleSatisfication === 0) {
 			n = value.length;
@@ -90,17 +103,25 @@ angular.module('ngPasscheck', [])
 
 		if (ruleSatisfication === 1) {
 			n = minimum + (value.length - considerations.length.medium.min);
-			bonus += considerations.numericCharacters.count > 1 ? ((considerations.numericCharacters.count - 1) * considerations.length.medium.factor) : 0;
-			bonus += considerations.capitalCharacters.count > 1 ? ((considerations.capitalCharacters.count - 1) * considerations.length.medium.factor) : 0;
-			bonus += considerations.specialCharacters.count * considerations.length.medium.factor;
+
+			if (value.length > considerations.length.medium.min) {
+				bonus += considerations.numericCharacters.count * considerations.length.medium.factor;
+				bonus += considerations.specialCharacters.count * considerations.length.medium.factor;
+				bonus += considerations.capitalCharacters.count * considerations.length.medium.factor;
+			}
+
 			n += bonus;
 		}
 
 		if (ruleSatisfication === 2) {
 			n = minimum + (value.length - considerations.length.strong.min);
-			bonus += considerations.numericCharacters.count > 1 ? ((considerations.numericCharacters.count - 1) * considerations.length.strong.factor) : 0;
-			bonus += considerations.capitalCharacters.count > 1 ? ((considerations.capitalCharacters.count - 1) * considerations.length.strong.factor) : 0;
-			bonus += considerations.specialCharacters.count > 1 ? ((considerations.specialCharacters.count - 1) * considerations.length.strong.factor) : 0;
+
+			if (value.length > considerations.length.strong.min) {
+				bonus += considerations.numericCharacters.count * considerations.length.strong.factor;
+				bonus += considerations.specialCharacters.count * considerations.length.strong.factor;
+				bonus += considerations.capitalCharacters.count * considerations.length.strong.factor;
+			}
+
 			n += bonus;
 		}
 
@@ -123,13 +144,12 @@ angular.module('ngPasscheck', [])
 		var isCommon = passCheck.testCommon ? dictionary.indexOf(passFormat === 'crc32' ? value.crc32() : value) > -1 ? true : false : false;
 
 		if (!isCommon) {
-			if (passCheck.regex.strong.test(value)) {
+			if (new RegExp(passCheck.policies.strong.pattern + '.{' + passCheck.policies.strong.minimum + ',}$').test(value)) {
 				result.strong = true;
 				ruleSatisfication = 2;
-			} else if (passCheck.regex.medium.test(value)) {
+			} else if (new RegExp(passCheck.policies.medium.pattern + '.{' + passCheck.policies.medium.minimum + ',}$').test(value)) {
 				result.medium = true;
 				ruleSatisfication = 1;
-				console.log('medium');
 			} else {
 				result.weak = true;
 			}
@@ -167,5 +187,4 @@ angular.module('ngPasscheck', [])
 	return {
 		'analyze': analyze
 	}
-}
-]);
+}]);

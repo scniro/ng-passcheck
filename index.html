@@ -24,11 +24,54 @@
 	<div class="content" ng-controller="ctrl">
 		<section class="pane left">
 			<h2>getting started</h2>
+
+			<div>
+				<pre><code prism class="language-shell">bower install ng-passcheck</code></pre>
+			</div>
+
+			<ul>
+				<li>
+					Include the <code prism class="language-javascript">ngPasscheck</code> module as a dependency in your AngularJS application
+				</li>
+			</ul>
+
+			<div>
+				<pre><code prism class="language-javascript">angular.module('app', ['ngPasscheck'])</code></pre>
+			</div>
+
+			<ul>
+				<li>
+					Use the results to craft the most elaborate UI, ever!
+				</li>
+			</ul>
+
+			<article>
+
+				<ul>
+					<li>
+						<h3>defaults: a <span>mostly</span> practical formula...</h3>
+						<code class="inline strong">strong</code> passwords must be at least <code class="inline">12</code> characters in length, contain at least <code class="inline">1</code> lowercase letter, <code class="inline">1</code> capital letter, <code class="inline">1</code> special character, and <code class="inline">1</code> numeric character. The minimum score for a strong password is <code class="inline">65</code>, the maximum, <code class="inline">100</code>. Each additional character will yield an increment of <code class="inline">1</code>. Per character increment, numeric, capital, or special characters will yield a bonus increment of <code class="inline">1.5</code> per <code class="inline">n</code> occurance in password.
+					</li>
+
+					<li><code class="inline medium">medium</code> passwords must be at least <code class="inline">8</code> characters in length, contain at least <code class="inline">1</code> lowercase letter, <code class="inline">1</code> capital letter, and <code class="inline">1</code> numeric character. The minimum score for a medium password is <code class="inline">40</code>, the maximum, <code class="inline">65</code>. Each additional character will yield an increment of <code class="inline">1</code>. Per character increment, numeric, capital, or special characters will yield a bonus increment of <code class="inline">1.25</code> per <code class="inline">n</code> occurance in password.</li>
+
+					<li><code class="inline weak">weak</code> passwords are any combination of characters, despite cryptologic strength, that do not meet strong or medium patterns. The maximum score for a weak password is <code class="inline">30</code>. Each character will yield an increment of <code class="inline">1</code>. Per character increment, numeric, capital, and special character will yield a bonus increment of <code class="inline">1</code> per <code class="inline">n</code> occurance in password.</li>
+
+					<li><code class="inline">isCommon</code> - any password which, if optionally matched against <code class="inline link"><a href="https://github.com/neo/discourse_heroku/blob/master/lib/common_passwords/10k-common-passwords.txt" target="_blank">10k common passwords</a></code> will automatically resolve to weak with a score of <code class="inline">0</code></li>
+				</ul>
+			</article>
 		</section>
 
 		<section class="pane right example">
-			<input ng-class="{'weak': result.weak, 'medium': result.medium, 'strong': result.strong }" type="password" ng-model="pwd" pass-check="myPwd"/>
-			<div>result: {{ result | json}}</div>
+			<input ng-class="{'weak': result.weak, 'medium': result.medium, 'strong': result.strong }" type="password" ng-model="pwd" pass-check="myPwd" placeholder="password" />
+
+			<div class="result">
+				<pre><code prism class="language-javascript">result:&nbsp;</code><code id="jsonresult" prism class="language-javascript"></code></pre>
+			</div>
+
+			<div class="tabs">
+				<tabs tabs="tabs" selected="0"></tabs>
+			</div>
 		</section>
 	</div>
 

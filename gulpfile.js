@@ -65,3 +65,5 @@ gulp.task('passwords:hashed', function() {
 	var json = JSON.stringify({ 'format': 'crc32', 'dictionary': result });
 	fs.writeFileSync('ng-passcheck/dist/passwords-hashed.json', json);
 });
+
+gulp.task('build', ['minify-js', 'passwords', 'passwords:hashed']);
