@@ -33,6 +33,20 @@ angular.module('ngPasscheck', [])
 	return {
 		init: function (options) {
 
+			this.scoring = {
+				base: 1,
+				medium: {
+					min: 40,
+					max: 65,
+					bonus: 1.25
+				},
+				strong: {
+					min: 65,
+					max: 100,
+					bonus: 1.50
+				}
+			}
+
 			this.increments = {
 				base: options.increments && options.increments.base ? options.increments.base : null,
 				bonus: {
@@ -73,12 +87,24 @@ angular.module('ngPasscheck', [])
 						minimum: this.policies.strong.minimum ? this.policies.strong.minimum : 12
 					}
 				},
+				scoring: {
+					medium: {
+						min: this.scoring.medium.min,
+						max: this.scoring.medium.max
+					},
+					strong: {
+						min: this.scoring.strong.min,
+						max: this.scoring.strong.max
+					}
+				},
 				testCommon: this.testCommon || false
 			}
 		}
 	}
 }])
 .factory('passCheckService', ['passCheck', '$http', '$rootScope', '$timeout', function (passCheck, $http, $rootScope, $timeout) {
+
+	console.log(passCheck.scoring)
 
 	var dictionary, passFormat;
 
@@ -99,9 +125,13 @@ angular.module('ngPasscheck', [])
 
 		var n = value.length;
 
-		var maximum = ruleSatisfication === 0 ? 30 : ruleSatisfication === 1 ? 65 : 100;
+		var maximum = ruleSatisfication === 0 ?
+			passCheck.scoring.medium.min : ruleSatisfication === 1 ?
+			passCheck.scoring.medium.max : passCheck.scoring.strong.max;
 
-		var minimum = ruleSatisfication === 2 ? 65 : ruleSatisfication === 1 ? 40 : 0;
+		var minimum = ruleSatisfication === 2 ?
+			passCheck.scoring.strong.min : ruleSatisfication === 1 ?
+			passCheck.scoring.medium.min : 0;
 
 		if (ruleSatisfication === 0) {
 			n = (value.length * passCheck.increments.base);
