@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "homepage": "https://github.com/scniro/ng-passcheck",
   "authors": [
-    "Sal Niro @scniro"
+    "Sal Niro"
   ],
   "description": "A policy driven AngularJS directive to check password strength",
   "main": "ng-passcheck.js",
