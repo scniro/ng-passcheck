@@ -34,24 +34,16 @@ angular.module('ngPasscheck', [])
 		init: function (options) {
 
 			this.scoring = {
-				base: 1,
+				base: options.scoring && options.scoring.base ? options.scoring.base: null,
 				medium: {
-					min: 40,
-					max: 65,
-					bonus: 1.25
+					min: options.scoring && options.scoring.medium && options.scoring.medium.min ? options.scoring.medium.min && options.scoring.medium.min: null,
+					max: options.scoring && options.scoring.medium && options.scoring.medium.max ? options.scoring.medium.max && options.scoring.medium.max : null,
+					bonus: options.scoring && options.scoring.medium && options.scoring.medium.bonus ? options.scoring.medium.max && options.scoring.medium.bonus : null
 				},
 				strong: {
-					min: 65,
-					max: 100,
-					bonus: 1.50
-				}
-			}
-
-			this.increments = {
-				base: options.increments && options.increments.base ? options.increments.base : null,
-				bonus: {
-					medium: options.increments && options.increments.bonus && options.increments.bonus.medium ? options.increments.bonus.medium : null,
-					strong: options.increments && options.increments.bonus && options.increments.bonus.strong ? options.increments.bonus.strong : null
+					min: options.scoring && options.scoring.strong && options.scoring.strong.min ? options.scoring.strong.min && options.scoring.strong.min : null,
+					max: options.scoring && options.scoring.strong && options.scoring.strong.max ? options.scoring.strong.max && options.scoring.strong.max : null,
+					bonus: options.scoring && options.scoring.strong && options.scoring.strong.bonus ? options.scoring.strong.max && options.scoring.strong.bonus : null
 				}
 			}
 
@@ -70,13 +62,6 @@ angular.module('ngPasscheck', [])
 		},
 		$get: function () {
 			return {
-				increments: {
-					base: this.increments.base ? this.increments.base : 1,
-					bonus: {
-						medium: this.increments.bonus.medium ? this.increments.bonus.medium : 1.25,
-						strong: this.increments.bonus.strong ? this.increments.bonus.strong : 1.50
-					}
-				},
 				policies: {
 					medium: {
 						pattern: this.policies.medium.pattern ? this.policies.medium.pattern : '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])',
@@ -88,13 +73,16 @@ angular.module('ngPasscheck', [])
 					}
 				},
 				scoring: {
+					base: this.scoring.base ? this.scoring.base: 1,
 					medium: {
-						min: this.scoring.medium.min,
-						max: this.scoring.medium.max
+						min: this.scoring.medium.min ? this.scoring.medium.min : 40,
+						max: this.scoring.medium.max ? this.scoring.medium.max : 65,
+						bonus: this.scoring.medium.bonus ? this.scoring.medium.bonus : 1.25
 					},
 					strong: {
-						min: this.scoring.strong.min,
-						max: this.scoring.strong.max
+						min: this.scoring.strong.min ? this.scoring.strong.min : 65,
+						max: this.scoring.strong.max ? this.scoring.strong.max : 100,
+						bonus: this.scoring.strong.bonus ? this.scoring.strong.bonus : 1.50
 					}
 				},
 				testCommon: this.testCommon || false
@@ -104,7 +92,7 @@ angular.module('ngPasscheck', [])
 }])
 .factory('passCheckService', ['passCheck', '$http', '$rootScope', '$timeout', function (passCheck, $http, $rootScope, $timeout) {
 
-	console.log(passCheck.scoring)
+		console.log(passCheck.scoring);
 
 	var dictionary, passFormat;
 
@@ -134,28 +122,28 @@ angular.module('ngPasscheck', [])
 			passCheck.scoring.medium.min : 0;
 
 		if (ruleSatisfication === 0) {
-			n = (value.length * passCheck.increments.base);
+			n = (value.length * passCheck.scoring.base);
 		}
 
 		if (ruleSatisfication === 1) {
-			n = minimum + (value.length * passCheck.increments.base);
+			n = minimum + (value.length * passCheck.scoring.base);
 
 			if (value.length > passCheck.policies.medium.minimum) {
-				bonus += special.numericCharacters.count * passCheck.increments.bonus.medium;
-				bonus += special.specialCharacters.count * passCheck.increments.bonus.medium;
-				bonus += special.capitalCharacters.count * passCheck.increments.bonus.medium;
+				bonus += special.numericCharacters.count * passCheck.scoring.medium.bonus;
+				bonus += special.specialCharacters.count * passCheck.scoring.medium.bonus;
+				bonus += special.capitalCharacters.count * passCheck.scoring.medium.bonus;
 			}
 
 			n += bonus;
 		}
 
 		if (ruleSatisfication === 2) {
-			n = minimum + ((value.length * passCheck.increments.base) - passCheck.policies.strong.minimum);
+			n = minimum + ((value.length * passCheck.scoring.base) - passCheck.policies.strong.minimum);
 
 			if (value.length > passCheck.policies.strong.minimum) {
-				bonus += special.numericCharacters.count * passCheck.increments.bonus.strong;
-				bonus += special.specialCharacters.count * passCheck.increments.bonus.strong;
-				bonus += special.capitalCharacters.count * passCheck.increments.bonus.strong;
+				bonus += special.numericCharacters.count * passCheck.scoring.strong.bonus;
+				bonus += special.specialCharacters.count * passCheck.scoring.strong.bonus;
+				bonus += special.capitalCharacters.count * passCheck.scoring.strong.bonus;
 			}
 
 			n += bonus;
