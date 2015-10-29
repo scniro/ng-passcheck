@@ -1,6 +1,8 @@
 ﻿# ngPasscheck
 A policy driven AngularJS directive to check password strength
 
+- [demo/api](http://ng-passcheck.azurewebsites.net/)
+
 # Getting Started
 
 ```
