@@ -149,11 +149,9 @@ article {
   color: #DEBC97; }
 
 :-moz-placeholder {
-  /* Firefox 18- */
   color: #DEBC97; }
 
 ::-moz-placeholder {
-  /* Firefox 19+ */
   color: #DEBC97; }
 
 :-ms-input-placeholder {
