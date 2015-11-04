@@ -1,82 +1,82 @@
 ﻿<!DOCTYPE html>
 <html ng-app="app">
 <head>
-	<base href="/" />
-	<title>ngPasscheck</title>
+    <base href="/" />
+    <title>ngPasscheck</title>
 
-	<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans">
-	<link href="demo-site/lib/prism.css" rel="stylesheet" />
-	<link rel="stylesheet" href="demo-site/css/style.css" />
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans">
+    <link rel="stylesheet" href="demo-site/lib/prism.css" />
+    <link rel="stylesheet" href="demo-site/css/style.css" />
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular.min.js"></script>
 </head>
 <body>
-	<header>
-		<h1>
-			ngPasscheck
-		</h1>
+    <header>
+        <h1>
+            ngPasscheck
+        </h1>
 
-		<a href="https://github.com/scniro/ng-passcheck" target="_blank">
-			<img src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png" />
-		</a>
-	</header>
+        <a href="https://github.com/scniro/ng-passcheck" target="_blank">
+            <img src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png" />
+        </a>
+    </header>
 
-	<div class="content" ng-controller="ctrl">
-		<section class="pane left">
-			<h2>getting started</h2>
+    <div class="content" ng-controller="ctrl">
+        <section class="pane left">
+            <h2>getting started</h2>
 
-			<div>
-				<pre><code prism class="language-shell">bower install ng-passcheck</code></pre>
-			</div>
+            <div>
+                <pre><code prism class="language-shell">bower install ng-passcheck</code></pre>
+            </div>
 
-			<ul>
-				<li>
-					Include the <code prism class="language-javascript">ngPasscheck</code> module as a dependency in your AngularJS application
-				</li>
-			</ul>
+            <ul>
+                <li>
+                    Include the <code prism class="language-javascript">ngPasscheck</code> module as a dependency in your AngularJS application
+                </li>
+            </ul>
 
-			<div>
-				<pre><code prism class="language-javascript">angular.module('app', ['ngPasscheck'])</code></pre>
-			</div>
+            <div>
+                <pre><code prism class="language-javascript">angular.module('app', ['ngPasscheck'])</code></pre>
+            </div>
 
-			<ul>
-				<li>
-					Tweak defaults and use results to craft the most elaborate UI, ever!
-				</li>
-			</ul>
+            <ul>
+                <li>
+                    Tweak defaults and use results to craft the most elaborate UI, ever!
+                </li>
+            </ul>
 
-			<article>
+            <article>
 
-				<ul>
-					<li>
-						<h3>defaults: a <span>mostly</span> practical formula...</h3>
-						<code class="inline strong">strong</code> passwords must be at least <code class="inline">12</code> characters in length, contain at least <code class="inline">1</code> lowercase letter, <code class="inline">1</code> capital letter, <code class="inline">1</code> special character, and <code class="inline">1</code> numeric character. The minimum score for a strong password is <code class="inline">65</code>, the maximum, <code class="inline">100</code>. Each additional character will yield a <code class="inline">base</code> increment of <code class="inline">1</code>. Per character increment, numeric, capital, or special characters will yield a <code class="inline">bonus</code> increment of <code class="inline">1.5</code> per <code class="inline">n</code> occurance in password.
-					</li>
+                <ul>
+                    <li>
+                        <h3>defaults: a <span>mostly</span> practical formula...</h3>
+                        <code class="inline strong">strong</code> passwords must be at least <code class="inline">12</code> characters in length, contain at least <code class="inline">1</code> lowercase letter, <code class="inline">1</code> capital letter, <code class="inline">1</code> special character, and <code class="inline">1</code> numeric character. The minimum score for a strong password is <code class="inline">65</code>, the maximum, <code class="inline">100</code>. Each additional character will yield a <code class="inline">base</code> increment of <code class="inline">1</code>. Per character increment, numeric, capital, or special characters will yield a <code class="inline">bonus</code> increment of <code class="inline">1.5</code> per <code class="inline">n</code> occurance in password.
+                    </li>
 
-					<li><code class="inline medium">medium</code> passwords must be at least <code class="inline">8</code> characters in length, contain at least <code class="inline">1</code> lowercase letter, <code class="inline">1</code> capital letter, and <code class="inline">1</code> numeric character. The minimum score for a medium password is <code class="inline">40</code>, the maximum, <code class="inline">65</code>. Each additional character will yield a <code class="inline">base</code> increment of <code class="inline">1</code>. Per character increment, numeric, capital, or special characters will yield a <code class="inline">bonus</code> increment of <code class="inline">1.25</code> per <code class="inline">n</code> occurance in password.</li>
+                    <li><code class="inline medium">medium</code> passwords must be at least <code class="inline">8</code> characters in length, contain at least <code class="inline">1</code> lowercase letter, <code class="inline">1</code> capital letter, and <code class="inline">1</code> numeric character. The minimum score for a medium password is <code class="inline">40</code>, the maximum, <code class="inline">65</code>. Each additional character will yield a <code class="inline">base</code> increment of <code class="inline">1</code>. Per character increment, numeric, capital, or special characters will yield a <code class="inline">bonus</code> increment of <code class="inline">1.25</code> per <code class="inline">n</code> occurance in password.</li>
 
-					<li><code class="inline weak">weak</code> passwords are any combination of characters, despite cryptologic strength, that do not meet strong or medium patterns. The maximum score for a weak password is the <code class="inline">min</code> value for a medium password. Each character will yield a <code class="inline">base</code> increment of <code class="inline">1</code>.</li>
+                    <li><code class="inline weak">weak</code> passwords are any combination of characters, despite cryptologic strength, that do not meet strong or medium patterns. The maximum score for a weak password is the <code class="inline">min</code> value for a medium password. Each character will yield a <code class="inline">base</code> increment of <code class="inline">1</code>.</li>
 
-					<li><code class="inline">isCommon</code> - any password which, if optionally matched against <code class="inline link"><a href="https://github.com/neo/discourse_heroku/blob/master/lib/common_passwords/10k-common-passwords.txt" target="_blank">10k common passwords</a></code> will automatically resolve to weak with a score of <code class="inline">0</code></li>
-				</ul>
-			</article>
-		</section>
+                    <li><code class="inline">isCommon</code> - any password which, if optionally matched against <code class="inline link"><a href="https://github.com/neo/discourse_heroku/blob/master/lib/common_passwords/10k-common-passwords.txt" target="_blank">10k common passwords</a></code> will automatically resolve to weak with a score of <code class="inline">0</code></li>
+                </ul>
+            </article>
+        </section>
 
-		<section class="pane right example">
-			<input ng-class="{'weak': result.weak, 'medium': result.medium, 'strong': result.strong }" type="password" ng-model="pwd" pass-check="myPwd" placeholder="password" />
+        <section class="pane right example">
+            <input ng-class="{'weak': result.weak, 'medium': result.medium, 'strong': result.strong }" type="password" ng-model="pwd" pass-check="myPwd" placeholder="password" />
 
-			<div class="result">
-				<pre><code prism class="language-javascript">result:&nbsp;</code><code id="jsonresult" prism class="language-javascript"></code></pre>
-			</div>
+            <div class="result">
+                <pre><code prism class="language-javascript">result:&nbsp;</code><code id="jsonresult" prism class="language-javascript"></code></pre>
+            </div>
 
-			<div class="tabs">
-				<tabs tabs="tabs" selected="0"></tabs>
-			</div>
-		</section>
-	</div>
+            <div class="tabs">
+                <tabs tabs="tabs" selected="0"></tabs>
+            </div>
+        </section>
+    </div>
 
-	<script src="demo-site/js/app.js"></script>
-	<script src="demo-site/lib/prism.js"></script>
-	<script src="ng-passcheck/src/ng-passcheck.js"></script>
+    <script src="demo-site/js/app.js"></script>
+    <script src="demo-site/lib/prism.js"></script>
+    <script src="ng-passcheck/src/ng-passcheck.js"></script>
 </body>
 </html>

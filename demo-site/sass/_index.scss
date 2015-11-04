@@ -1,193 +1,193 @@
 ﻿body {
-	font-family: 'Open Sans', sans-serif;
-	min-width: 58.000em;
+    font-family: 'Open Sans', sans-serif;
+    min-width: 58.000em;
 }
 
 header {
-	width: 100%;
-	box-sizing: border-box;
-	padding: 0.500em 2.000em;
-	height: 4.000em;
-	background-color: $header;
-	overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.500em 2.000em;
+    height: 4.000em;
+    background-color: $header;
+    overflow: hidden;
 
-	h1 {
-		display: inline;
-		font-size: 20pt;
-		letter-spacing: 0.125em;
-		color: #FFF;
-		line-height: 180%;
-	}
+    h1 {
+        display: inline;
+        font-size: 20pt;
+        letter-spacing: 0.125em;
+        color: #FFF;
+        line-height: 180%;
+    }
 
-	a {
-		text-decoration: none;
-		color: inherit;
+    a {
+        text-decoration: none;
+        color: inherit;
 
-		&:nth-child(2) {
-			float: right;
-			position: relative;
-			top: 1.750em;
-			transition: .10s ease-in;
+        &:nth-child(2) {
+            float: right;
+            position: relative;
+            top: 1.750em;
+            transition: .10s ease-in;
 
-			img {
-				width: 8.000em;
-			}
+            img {
+                width: 8.000em;
+            }
 
-			&:hover {
-				transform: translateY(-1.875em);
-			}
-		}
-	}
+            &:hover {
+                transform: translateY(-1.875em);
+            }
+        }
+    }
 }
 
 .content {
-	height: 20.000em;
-	padding: 2.000em;
+    height: 20.000em;
+    padding: 2.000em;
 
-	h2 {
-		margin-top: 0;
-	}
+    h2 {
+        margin-top: 0;
+    }
 
-	section.pane {
-		width: 50%;
-		box-sizing: border-box;
-		padding-right: 2.000em;
+    section.pane {
+        width: 50%;
+        box-sizing: border-box;
+        padding-right: 2.000em;
 
-		&.left {
-			float: left;
-		}
+        &.left {
+            float: left;
+        }
 
-		&.right {
-			float: right;
-		}
-	}
+        &.right {
+            float: right;
+        }
+    }
 
-	.example {
-		padding-top: 3.250em;
+    .example {
+        padding-top: 3.250em;
 
-		input {
-			width: 100%;
-			margin: 0 auto;
-			display: block;
-			font-size: 20pt;
-			margin-bottom: 1.500em;
-			border-radius: 0.500em;
-			padding: 0.500em;
-			letter-spacing: 0.250em;
-			border: solid 1px #DEBC97;
-			box-shadow: inset 0 0 6px 6px #FFF;
-			transition: box-shadow .25s, border-color .25s;
+        input {
+            width: 100%;
+            margin: 0 auto;
+            display: block;
+            font-size: 20pt;
+            margin-bottom: 1.500em;
+            border-radius: 0.500em;
+            padding: 0.500em;
+            letter-spacing: 0.250em;
+            border: solid 1px #DEBC97;
+            box-shadow: inset 0 0 6px 6px #FFF;
+            transition: box-shadow .25s, border-color .25s;
 
-			&.weak {
-				border-color: #FFF;
-				box-shadow: inset 0 0 6px 6px #FFB7B7;
-			}
+            &.weak {
+                border-color: #FFF;
+                box-shadow: inset 0 0 6px 6px #FFB7B7;
+            }
 
-			&.medium {
-				border-color: #FFF;
-				box-shadow: inset 0 0 6px 6px #FFD699;
-			}
+            &.medium {
+                border-color: #FFF;
+                box-shadow: inset 0 0 6px 6px #FFD699;
+            }
 
-			&.strong {
-				border-color: #FFF;
-				box-shadow: inset 0 0 6px 6px #B0DAB3;
-			}
+            &.strong {
+                border-color: #FFF;
+                box-shadow: inset 0 0 6px 6px #B0DAB3;
+            }
 
-			&:focus {
-				outline: none;
-			}
-		}
+            &:focus {
+                outline: none;
+            }
+        }
 
-		.result {
-			margin-bottom: 2.500em;
-			margin-top: 2.600em;
-		}
-	}
+        .result {
+            margin-bottom: 2.500em;
+            margin-top: 2.600em;
+        }
+    }
 }
 
 article {
-	
-	margin-top: 2.750em;
-	h3 {
-		margin-top: 0;
+    margin-top: 2.750em;
 
-		span {
-			font-style: italic;
-		}
-	}
+    h3 {
+        margin-top: 0;
 
-	ul {
-		list-style-type: none;
-		padding: 0;
-		font-size: 10pt;
+        span {
+            font-style: italic;
+        }
+    }
 
-		li {
-			background-color: #f5f2f0;
-			line-height: 200%;
-			margin-bottom: 1em;
-			border: solid 1px $gray-darker;
-			padding: 1em;
-			margin-bottom: 0.5em;
-		}
-	}
+    ul {
+        list-style-type: none;
+        padding: 0;
+        font-size: 10pt;
+
+        li {
+            background-color: #f5f2f0;
+            line-height: 200%;
+            margin-bottom: 1em;
+            border: solid 1px $gray-darker;
+            padding: 1em;
+            margin-bottom: 0.5em;
+        }
+    }
 }
 
 .tabs {
-	margin-top: 5.000em;
+    margin-top: 5.000em;
 }
 
 ::-webkit-input-placeholder {
-	color: #DEBC97;
+    color: #DEBC97;
 }
 
 :-moz-placeholder {
-	color: #DEBC97;
+    color: #DEBC97;
 }
 
 ::-moz-placeholder {
-	color: #DEBC97;
+    color: #DEBC97;
 }
 
 :-ms-input-placeholder {
-	color: #DEBC97;
+    color: #DEBC97;
 }
 
 .inline {
-	background-color: #FFF;
-	border: solid 1px $gray-darker;
-	border-radius: 4px;
-	padding: 2px 4px;
+    background-color: #FFF;
+    border: solid 1px $gray-darker;
+    border-radius: 4px;
+    padding: 2px 4px;
 
-	&.strong {
-		background-color: #B0DAB3;
-		border-color: #52A257;
-	}
+    &.strong {
+        background-color: #B0DAB3;
+        border-color: #52A257;
+    }
 
-	&.medium {
-		background-color: #FFD699;
-		border-color: #B28035;
-	}
+    &.medium {
+        background-color: #FFD699;
+        border-color: #B28035;
+    }
 
-	&.weak {
-		background-color: #FFB7B7;
-		border-color: #B04646;
-	}
+    &.weak {
+        background-color: #FFB7B7;
+        border-color: #B04646;
+    }
 
-	&.link {
-		background-color: #B7DCFF;
-		border-color: dodgerblue;
-		color: white;
+    &.link {
+        background-color: #B7DCFF;
+        border-color: dodgerblue;
+        color: white;
 
-		> a {
-			text-decoration: none;
+        > a {
+            text-decoration: none;
 
-			&:active {
-				color: dodgerblue;
-			}
+            &:active {
+                color: dodgerblue;
+            }
 
-			&:visited {
-				color: dodgerblue;
-			}
-		}
-	}
+            &:visited {
+                color: dodgerblue;
+            }
+        }
+    }
 }

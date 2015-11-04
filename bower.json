@@ -1,35 +1,35 @@
 {
-  "name": "ng-passcheck",
-  "version": "1.0.0",
-  "homepage": "https://github.com/scniro/ng-passcheck",
-  "authors": [
-    "Sal Niro <salvatore.niro@outlook.com>"
-  ],
-  "description": "A policy driven AngularJS directive to check password strength",
-  "main": "ng-passcheck.js",
-  "keywords": [
-    "password",
-    "angular",
-    "angularjs",
-	"passwordstrength",
-	"strength",
-	"passwords",
-	"passcheck",
-	"passchk"
-  ],
-  "license": "GPL-2.0",
-  "dependencies": {
-    "angular": "^1.2"
-  },
-  "ignore": [
-    "**/.*",
-	"bower_components",
-	"node_modules",
-	"demo-site",
-	"index.html",
-	"README.md",
-	"package.json",
-	"bower.json",
-	"gulpfile.js"
-  ]
+    "name": "ng-passcheck",
+    "version": "1.0.0",
+    "homepage": "https://github.com/scniro/ng-passcheck",
+    "authors": [
+        "Sal Niro <salvatore.niro@outlook.com>"
+    ],
+    "description": "A policy driven AngularJS directive to check password strength",
+    "main": "ng-passcheck.js",
+    "keywords": [
+        "password",
+        "angular",
+        "angularjs",
+        "passwordstrength",
+        "strength",
+        "passwords",
+        "passcheck",
+        "passchk"
+    ],
+    "license": "GPL-2.0",
+    "dependencies": {
+        "angular": "^1.2"
+    },
+    "ignore": [
+        "**/.*",
+        "bower_components",
+        "node_modules",
+        "demo-site",
+        "index.html",
+        "README.md",
+        "package.json",
+        "bower.json",
+        "gulpfile.js"
+    ]
 }

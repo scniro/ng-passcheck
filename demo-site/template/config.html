@@ -1,33 +1,33 @@
 ﻿<div><pre><code prism class="language-javascript">module.config(['passCheckProvider', function (passCheckProvider) {
-	passCheckProvider.init({
-		policies: { // optional. defaults shown. shortcut syntax such as \d must be escaped as \\d
-			medium: {
-				pattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])',
-				minimum: 8
-			},
-			strong: {
-				pattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\\w\\s])',
-				minimum: 12
-			}
-		},
-		scoring: { // optional. defaults shown.
-			base: 1,
-			medium: {
-				min: 40,
-				max: 65,
-				bonus: 1.25
-			},
-			strong: {
-				min: 65,
-				max: 100,
-				bonus: 1.50
-			}
-		},
-		testCommon: { // do not specify this configuration to skip common checks
-			path: '~/passwords.json', // optionally, passwords-hashed.json
-			limit: 10000
-		}
-	});
+    passCheckProvider.init({
+        policies: { // optional. defaults shown. shortcut syntax such as \d must be escaped as \\d
+            medium: {
+                pattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])',
+                minimum: 8
+            },
+            strong: {
+                pattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\\w\\s])',
+                minimum: 12
+            }
+        },
+        scoring: { // optional. defaults shown.
+            base: 1,
+            medium: {
+                min: 40,
+                max: 65,
+                bonus: 1.25
+            },
+            strong: {
+                min: 65,
+                max: 100,
+                bonus: 1.50
+            }
+        },
+        testCommon: { // do not specify this configuration to skip common checks
+            path: '~/passwords.json', // optionally, passwords-hashed.json
+            limit: 10000
+        }
+    });
 }]);
 </code></pre>
 </div>
