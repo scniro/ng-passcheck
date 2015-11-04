@@ -5,20 +5,7 @@ app.config(function (passCheckProvider) {
 		testCommon: {
 			path: '/ng-passcheck/dist/passwords-hashed.json',
 			limit: 10000
-		},
-		//scoring: {
-		//	base: 1,
-		//	medium: {
-		//		min: 40,
-		//		max: 65,
-		//		bonus: 1.25
-		//	},
-		//	strong: {
-		//		min: 65,
-		//		max: 100,
-		//		bonus: 1.50
-		//	}
-		//}
+		}
 	});
 });
 
