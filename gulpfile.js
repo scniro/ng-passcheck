@@ -13,6 +13,8 @@ var crc32 = require('buffer-crc32');
 
 var fs = require('fs');
 
+var minifyCss = require('gulp-minify-css');
+
 gulp.task('minify-js', function() {
     return gulp.src('ng-passcheck/src/*.js')
         .pipe(uglify())
@@ -28,6 +30,10 @@ gulp.task('sass', function() {
         .pipe(autoprefixer({
             browsers: ['last 2 versions'],
             cascade: false
+        }))
+        .pipe(minifyCss())
+        .pipe(rename({
+            suffix: '.min'
         }))
         .pipe(gulp.dest('demo-site/css'));
 });

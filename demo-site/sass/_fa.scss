@@ -1,0 +1,33 @@
+﻿/**** FONT AWESOME ****/
+ 
+//$fa-font-path:        "../font" !default;
+$fa-font-path:        "//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/fonts" !default; // for referencing Bootstrap CDN font files directly
+$fa-css-prefix:       fa !default;
+$fa-version:          "4.0.3" !default;
+$fa-border-color:     #eee !default;
+$fa-inverse:          #fff !default;
+$fa-li-width:        (30em / 14) !default;
+
+.#{$fa-css-prefix} {
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@font-face {
+  font-family: 'FontAwesome';
+  src: url('#{$fa-font-path}/fontawesome-webfont.woff?v=#{$fa-version}') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+$fa-var-lock: "\f023";
+
+.#{$fa-css-prefix}-lock:before { content: $fa-var-lock; }
+
+.#{$fa-css-prefix} {
+	font-family: FontAwesome;
+}

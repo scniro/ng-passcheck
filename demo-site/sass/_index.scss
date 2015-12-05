@@ -8,15 +8,19 @@ header {
     box-sizing: border-box;
     padding: 0.500em 2.000em;
     height: 4.000em;
-    background-color: $header;
+    background-color: $accent;
     overflow: hidden;
 
     h1 {
         display: inline;
         font-size: 20pt;
         letter-spacing: 0.125em;
-        color: #FFF;
+        color: white;
         line-height: 180%;
+
+        i {
+            color: $accent-3;
+        }
     }
 
     a {
@@ -74,22 +78,22 @@ header {
             border-radius: 0.500em;
             padding: 0.500em;
             letter-spacing: 0.250em;
-            border: solid 1px #DEBC97;
-            box-shadow: inset 0 0 6px 6px #FFF;
+            border: solid 1px $contrast;
+            box-shadow: inset 0 0 6px 6px white;
             transition: box-shadow .25s, border-color .25s;
 
             &.weak {
-                border-color: #FFF;
+                border-color: white;
                 box-shadow: inset 0 0 6px 6px #FFB7B7;
             }
 
             &.medium {
-                border-color: #FFF;
+                border-color: white;
                 box-shadow: inset 0 0 6px 6px #FFD699;
             }
 
             &.strong {
-                border-color: #FFF;
+                border-color: white;
                 box-shadow: inset 0 0 6px 6px #B0DAB3;
             }
 
@@ -137,23 +141,23 @@ article {
 }
 
 ::-webkit-input-placeholder {
-    color: #DEBC97;
+    color: $contrast-2;
 }
 
 :-moz-placeholder {
-    color: #DEBC97;
+    color: $contrast-2;
 }
 
 ::-moz-placeholder {
-    color: #DEBC97;
+    color: $contrast-2;
 }
 
 :-ms-input-placeholder {
-    color: #DEBC97;
+    color: $contrast-2;
 }
 
 .inline {
-    background-color: #FFF;
+    background-color: white;
     border: solid 1px $gray-darker;
     border-radius: 4px;
     padding: 2px 4px;
@@ -177,6 +181,7 @@ article {
         background-color: #B7DCFF;
         border-color: dodgerblue;
         color: white;
+        white-space: nowrap;
 
         > a {
             text-decoration: none;
