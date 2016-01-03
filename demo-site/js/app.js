@@ -2,9 +2,10 @@
 
 app.config(function (passCheckProvider) {
     passCheckProvider.init({
-        testCommon: {
-            path: '/ng-passcheck/dist/passwords-hashed.json',
-            limit: 10000
+        common: {
+            test: true,
+            limit: 500,
+            path: '/ng-passcheck/src/passwords.txt'
         }
     });
 });
