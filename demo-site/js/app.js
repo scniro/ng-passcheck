@@ -4,8 +4,7 @@ app.config(function (passCheckProvider) {
     passCheckProvider.init({
         common: {
             test: true,
-            limit: 500,
-            path: '/ng-passcheck/src/passwords.txt'
+            path: '/ng-passcheck/passwords.json'
         }
     });
 });

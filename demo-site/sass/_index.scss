@@ -8,18 +8,20 @@ header {
     box-sizing: border-box;
     padding: 0.500em 2.000em;
     height: 4.000em;
-    background-color: $accent;
+    background-color: $gray-lighter;
     overflow: hidden;
+    border-bottom: solid 1px $gray-darker;
 
     h1 {
         display: inline;
         font-size: 20pt;
         letter-spacing: 0.125em;
-        color: white;
+        color: $accent;
         line-height: 180%;
 
+
         i {
-            color: $accent-3;
+            color: $accent;
         }
     }
 
@@ -78,7 +80,7 @@ header {
             border-radius: 0.500em;
             padding: 0.500em;
             letter-spacing: 0.250em;
-            border: solid 1px $contrast;
+            border: solid 1px $gray-darker;
             box-shadow: inset 0 0 6px 6px white;
             transition: box-shadow .25s, border-color .25s;
 
