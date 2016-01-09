@@ -8,15 +8,14 @@ header {
     box-sizing: border-box;
     padding: 0.500em 2.000em;
     height: 4.000em;
-    background-color: $gray-lighter;
+    background-color: $accent-3;
     overflow: hidden;
-    border-bottom: solid 1px $gray-darker;
 
     h1 {
         display: inline;
         font-size: 20pt;
         letter-spacing: 0.125em;
-        color: $accent;
+        color: white;
         line-height: 180%;
 
 

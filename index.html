@@ -51,10 +51,10 @@
                 <ul>
                     <li>
                         <h3>defaults: a <span>mostly</span> practical formula...</h3>
-                        <code class="inline strong">strong</code> passwords must be at least <code class="inline">12</code> characters in length, contain at least <code class="inline">1</code> lowercase letter, <code class="inline">1</code> capital letter, <code class="inline">1</code> special character, and <code class="inline">1</code> numeric character. The minimum score for a strong password is <code class="inline">65</code>, the maximum, <code class="inline">100</code>. Each additional character will yield a <code class="inline">base</code> increment of <code class="inline">1</code>. Per character increment, numeric, capital, or special characters will yield a <code class="inline">bonus</code> increment of <code class="inline">1.5</code> per <code class="inline">n</code> occurance in password.
+                        <code class="inline strong">strong</code> passwords must be at least <code class="inline">8</code> characters in length, contain at least <code class="inline">1</code> lowercase letter, <code class="inline">1</code> capital letter, <code class="inline">1</code> special character, and <code class="inline">1</code> numeric character. The minimum score for a strong password is <code class="inline">65</code>, the maximum, <code class="inline">100</code>. Each additional character will yield a <code class="inline">base</code> increment of <code class="inline">1</code>. Per character increment, numeric, capital, or special characters will yield a <code class="inline">bonus</code> increment of <code class="inline">1.5</code> per <code class="inline">n</code> occurance in password.
                     </li>
 
-                    <li><code class="inline medium">medium</code> passwords must be at least <code class="inline">8</code> characters in length, contain at least <code class="inline">1</code> lowercase letter, <code class="inline">1</code> capital letter, and <code class="inline">1</code> numeric character. The minimum score for a medium password is <code class="inline">40</code>, the maximum, <code class="inline">65</code>. Each additional character will yield a <code class="inline">base</code> increment of <code class="inline">1</code>. Per character increment, numeric, capital, or special characters will yield a <code class="inline">bonus</code> increment of <code class="inline">1.25</code> per <code class="inline">n</code> occurance in password.</li>
+                    <li><code class="inline medium">medium</code> passwords must be at least <code class="inline">6</code> characters in length, contain at least <code class="inline">1</code> lowercase letter, <code class="inline">1</code> capital letter, and <code class="inline">1</code> numeric character. The minimum score for a medium password is <code class="inline">40</code>, the maximum, <code class="inline">65</code>. Each additional character will yield a <code class="inline">base</code> increment of <code class="inline">1</code>. Per character increment, numeric, capital, or special characters will yield a <code class="inline">bonus</code> increment of <code class="inline">1.25</code> per <code class="inline">n</code> occurance in password.</li>
 
                     <li><code class="inline weak">weak</code> passwords are any combination of characters, despite cryptologic strength, that do not meet strong or medium patterns. The maximum score for a weak password is the <code class="inline">min</code> value for a medium password. Each character will yield a <code class="inline">base</code> increment of <code class="inline">1</code>.</li>
 
@@ -78,6 +78,6 @@
 
     <script src="demo-site/js/app.js"></script>
     <script src="demo-site/lib/prism.js"></script>
-    <script src="ng-passcheck/src/ng-passcheck.js"></script>
+    <script src="ng-passcheck/dist/ng-passcheck.min.js"></script>
 </body>
 </html>
