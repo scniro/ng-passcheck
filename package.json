@@ -1,6 +1,6 @@
 {
   "name": "ngPasscheck",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A policy driven AngularJS directive to check password strength",
   "dependencies": {
     "angular": "^1.2"
