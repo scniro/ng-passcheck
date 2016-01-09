@@ -3,11 +3,11 @@
         policies: { // optional. defaults shown. shortcut syntax such as \d must be escaped as \\d
             medium: {
                 pattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])',
-                minimum: 8
+                min: 6
             },
             strong: {
                 pattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\\w\\s])',
-                minimum: 12
+                min 8
             }
         },
         scoring: { // optional. defaults shown.
@@ -23,9 +23,9 @@
                 bonus: 1.50
             }
         },
-        testCommon: { // do not specify this configuration to skip common checks
-            path: '~/passwords.json', // optionally, passwords-hashed.json
-            limit: 10000
+        common: { // do not specify this configuration to skip common checks
+            test: true,
+            path: '~/passwords.json'
         }
     });
 }]);
