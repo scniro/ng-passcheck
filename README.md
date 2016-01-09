@@ -1,5 +1,7 @@
 ﻿# ngPasscheck
-A policy driven AngularJS directive to check password strength
+A policy driven AngularJS way to check password strength
+
+This is just a wrapper for [passcheck](https://github.com/scniro/passcheck)
 
 - [demo/api](http://ng-passcheck.azurewebsites.net/)
 

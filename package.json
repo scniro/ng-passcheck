@@ -1,6 +1,6 @@
 {
   "name": "ngPasscheck",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A policy driven AngularJS directive to check password strength",
   "dependencies": {
     "angular": "^1.2"
@@ -19,8 +19,8 @@
     "type": "git",
     "url": "git+https://github.com/scniro/ng-passcheck.git"
   },
-  "author": "Sal Niro <salvatore.niro@outlook.com>",
-  "license": "GPL-2.0",
+  "author": "scniro <scniro@outlook.com>",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/scniro/ng-passcheck/issues"
   },
